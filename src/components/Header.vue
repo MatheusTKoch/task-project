@@ -3,7 +3,11 @@
     <p>My Tasks</p>
     <div>Add a task below (with Enter) and click over the finished tasks</div>
     <br />
-    <input type="text" v-model="taskText" @keydown.enter="submitData" />
+    <input
+    id="insertField" 
+    type="text"
+    v-model="taskText" 
+    @keydown.enter="submitData" />
   </section>
 </template>
 
@@ -17,6 +21,7 @@ export default {
   computed: {
     submitData() {
       this.$emit("submit-task", this.taskText);
+      document.getElementById("insertField").value = '';
     },
   },
 };
@@ -34,5 +39,6 @@ div {
 input {
   border: 0.25px solid;
   border-radius: 7px;
+  width: 400px;
 }
 </style>
