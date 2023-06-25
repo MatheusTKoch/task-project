@@ -21,24 +21,11 @@ export default {
       type: String,
       required: true,
     },
+    isClicked: {
+      type: Boolean,
+      required: true
+    }
   },
 };
 </script>
 
-<style>
-/* .taskBorder {
-    padding: 8px;
-    width: fit-content;
-    border: 0.5px solid black;
-    border-radius: 4px;
- } */
-
-span {
-  text-align: center;
-  padding: 2px;
-}
-
-hr {
-  width: fit-content;
-}
-</style>

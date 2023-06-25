@@ -41,4 +41,13 @@ input {
   border-radius: 7px;
   width: 400px;
 }
+
+span {
+  text-align: center;
+  padding: 2px;
+}
+
+hr {
+  width: fit-content;
+}
 </style>

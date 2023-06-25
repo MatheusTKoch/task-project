@@ -1,38 +1,37 @@
 <template>
   <main-header @submit-task="addtask"></main-header>
-  <br />
-  <hr />
-  <div class="tasksBody">
+  <content-box>
     <task-body
       v-for="tasks in task"
       :id="tasks.id"
       :taskText="tasks.taskText"
+      :style="{isClicked}"
     ></task-body>
-  </div>
+  </content-box>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      task: [ {
-        id: '1',
-        taskText: 'Build a todo task app!'
-      }
-      ]
-    }
+      task: [
+        {
+          id: "1",
+          taskText: "Build a todo task app!",
+        },
+      ],
+    };
   },
   methods: {
     addtask(taskText) {
       const task = {
         id: new Date().toISOString(),
-        taskText: taskText
-      }
+        taskText: taskText,
+      };
       this.task.push(task);
-    }
-  }
-  }
-
+    },
+  },
+};
 </script>
 
 <style>
@@ -47,7 +46,7 @@ export default {
   border-width: 0.5px solid;
 }
 
-.tasksBody {
-  box-shadow: black 2px;
+#crossed {
+  text-decoration: line-through;
 }
 </style>
