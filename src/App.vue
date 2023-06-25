@@ -5,7 +5,9 @@
       v-for="tasks in task"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      :style="{isClicked}"
+      :crossed="tasks.crossed"
+      @click="crosstask(this.task.id)"
+      :class="{ isCrossed: this.task.crossed === true , notCrossed: this.task.crossed === false}"
     ></task-body>
   </content-box>
 </template>
@@ -14,10 +16,12 @@
 export default {
   data() {
     return {
+      crossId: null,
       task: [
         {
           id: "1",
           taskText: "Build a todo task app!",
+          crossed: false
         },
       ],
     };
@@ -27,8 +31,17 @@ export default {
       const task = {
         id: new Date().toISOString(),
         taskText: taskText,
+        crossed: false
       };
       this.task.push(task);
+    },
+    crosstask(taskId) {
+      if (this.task.id === taskId && this.task.crossed === true){
+        this.task.crossed = false;
+      } else if (this.task.id === taskId) {
+        this.task.crossed = true;
+      } 
+      console.log(this.task.crossed)
     },
   },
 };
@@ -46,7 +59,11 @@ export default {
   border-width: 0.5px solid;
 }
 
-#crossed {
+.isCrossed {
   text-decoration: line-through;
+}
+
+.notCrossed {
+  text-decoration: none;
 }
 </style>

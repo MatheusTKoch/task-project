@@ -1,5 +1,5 @@
 <template>
-  <div class="taskBorder">
+  <div>
     <span
       >{{ taskText }}
       <hr
@@ -21,7 +21,7 @@ export default {
       type: String,
       required: true,
     },
-    isClicked: {
+    crossed: {
       type: Boolean,
       required: true
     }
