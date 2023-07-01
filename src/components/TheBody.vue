@@ -25,11 +25,7 @@ export default {
     id: {
       type: String,
       required: true,
-    },
-    crossed: {
-      type: Boolean,
-      required: true,
-    },
+    }
   },
 };
 </script>

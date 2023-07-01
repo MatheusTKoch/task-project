@@ -1,49 +1,60 @@
 <template>
-  <main-header @submit-task="addtask"></main-header>
+  <main-header></main-header>
   <content-box>
     <task-body
       v-for="tasks in task"
+      :key="tasks.id"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      :crossed="tasks.crossed"
-      @click="crosstask(this.task.id)"
-      :class="{ isCrossed: this.task.crossed === true , notCrossed: this.task.crossed === false}"
+      @keydown.enter="addtask"
     ></task-body>
   </content-box>
 </template>
 
 <script>
+import ContentBox from "./components/UI/ContentBox.vue";
+
 export default {
+  components: {
+    ContentBox
+  },
   data() {
     return {
-      crossId: null,
-      task: [
-        {
-          id: "1",
-          taskText: "Build a todo task app!",
-          crossed: false
-        },
-      ],
+      task: [],
     };
   },
   methods: {
-    addtask(taskText) {
-      const task = {
-        id: new Date().toISOString(),
-        taskText: taskText,
-        crossed: false
-      };
-      this.task.push(task);
+    addtask() {
+      this.isLoading = true;
+      this.error = null;
+      fetch("https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json")
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          this.isLoading = false;
+          const task = [];
+          for (const id in data) {
+            task.push({
+              id: id,
+              taskText: data[id].taskText,
+            });
+          }
+          this.task = task;
+          console.log(this.task)
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+          this.error = 'Failed to load data - please try again later!';
+        });
     },
-    crosstask(taskId) {
-      if (this.task.id === taskId && this.task.crossed === true){
-        this.task.crossed = false;
-      } else if (this.task.id === taskId) {
-        this.task.crossed = true;
-      } 
-      console.log(this.task.crossed)
     },
-  },
+    mounted() {
+      this.addtask();
+    }
 };
 </script>
 
