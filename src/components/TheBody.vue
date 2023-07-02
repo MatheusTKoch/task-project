@@ -6,7 +6,7 @@
   /> 
   <span>-</span> 
   <span
-      >{{ taskText }}<span class="material-symbols-outlined"> delete </span>
+      >{{ taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
       <hr
     /></span>
   </div>

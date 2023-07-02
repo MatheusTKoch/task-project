@@ -69,7 +69,7 @@ export default {
           this.error = 'Failed to load data - please try again later!';
         });
     },
-  },
+  }
 };
 </script>
 

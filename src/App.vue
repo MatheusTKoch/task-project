@@ -6,7 +6,7 @@
       :key="tasks.id"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      @keydown.enter="addtask"
+      @keydown.enter="loadTask()"
     ></task-body>
   </content-box>
 </template>
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    addtask() {
+    loadTask() {
       this.isLoading = true;
       this.error = null;
       fetch("https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json")
@@ -53,7 +53,7 @@ export default {
     },
     },
     mounted() {
-      this.addtask();
+      this.loadTask();
     }
 };
 </script>
