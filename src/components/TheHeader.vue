@@ -12,7 +12,7 @@
       type="text"
       v-model="taskText"
       @keydown.enter="submitData"
-    /><span class="material-symbols-sharp" @click="refreshTasks">
+    /><span class="material-symbols-sharp" @click="refreshTasks()">
       refresh
     </span>
   </section>
@@ -25,7 +25,7 @@ export default {
       taskText: "",
     };
   },
-  computed: {
+  methods: {
     submitData() {
       fetch(
         "https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json",
