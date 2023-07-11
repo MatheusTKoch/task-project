@@ -12,7 +12,7 @@
       type="text"
       v-model="taskText"
       @keydown.enter="submitData"
-    /><span class="material-symbols-sharp" @click="refreshTasks()">
+    /><span class="material-symbols-sharp">
       refresh
     </span>
   </section>
@@ -41,34 +41,7 @@ export default {
         }
       );
       document.getElementById("insertField").value = "";
-    },
-    refreshTasks() {
-      this.isLoading = true;
-      this.error = null;
-      fetch("https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json")
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then((data) => {
-          this.isLoading = false;
-          const task = [];
-          for (const id in data) {
-            task.push({
-              id: id,
-              taskText: data[id].taskText,
-            });
-          }
-          this.task = task;
-          console.log(this.task)
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-          this.error = 'Failed to load data - please try again later!';
-        });
-    },
+    }
   }
 };
 </script>

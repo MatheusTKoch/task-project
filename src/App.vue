@@ -6,7 +6,7 @@
       :key="tasks.id"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      @keydown.enter="loadTask()"
+      @keydown.enter="refreshTasks()"
     ></task-body>
   </content-box>
 </template>
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    loadTask() {
+    refreshTasks() {
       this.isLoading = true;
       this.error = null;
       fetch("https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json")
@@ -50,10 +50,10 @@ export default {
           this.isLoading = false;
           this.error = 'Failed to load data - please try again later!';
         });
-    },
+    }
     },
     mounted() {
-      this.loadTask();
+      this.refreshTasks();
     }
 };
 </script>
