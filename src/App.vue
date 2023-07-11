@@ -37,7 +37,7 @@ export default {
           this.isLoading = false;
           const task = [];
           for (const id in data) {
-            task.push({
+            task.splice(task.length, 0, {
               id: id,
               taskText: data[id].taskText,
             });
