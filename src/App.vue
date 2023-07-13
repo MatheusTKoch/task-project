@@ -1,12 +1,11 @@
 <template>
-  <main-header></main-header>
+  <main-header @someEvent="refreshTasks"></main-header>
   <content-box>
     <task-body
-      v-for="tasks in task"
-      :key="tasks.id"
+      v-for="tasks in taskArray"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      @keydown.enter="refreshTasks()"
+      @keydown.enter="refreshTasks"
     ></task-body>
   </content-box>
 </template>
@@ -20,7 +19,7 @@ export default {
   },
   data() {
     return {
-      task: [],
+      taskArray: []
     };
   },
   methods: {
@@ -41,9 +40,9 @@ export default {
               id: id,
               taskText: data[id].taskText,
             });
+            this.taskArray = task;
+            console.log(this.taskArray)
           }
-          this.task = task;
-          console.log(this.task)
         })
         .catch((error) => {
           console.log(error);

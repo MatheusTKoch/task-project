@@ -38,9 +38,10 @@ export default {
             id: this.id,
             taskText: this.taskText,
           }),
-        }
-      );
+        }   
+      ); 
       document.getElementById("insertField").value = "";
+      this.$emit('someEvent')
     }
   }
 };
