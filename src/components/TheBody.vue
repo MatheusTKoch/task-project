@@ -6,7 +6,7 @@
   /> 
   <span>-</span> 
   <span
-      >{{ taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
+      >{{ taskArray.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
       <hr
     /></span>
   </div>
@@ -15,18 +15,10 @@
 <script>
 export default {
   data() {
-    return {};
-  },
-  props: {
-    taskText: {
-      type: String,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true,
-    }
-  },
+    return {
+      taskArray: this.$store.state.taskArray
+    }   
+  }
 };
 </script>
 

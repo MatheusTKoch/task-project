@@ -1,11 +1,12 @@
 <template>
-  <main-header @someEvent="refreshTasks"></main-header>
+  <main-header></main-header>
+  <!-- @someEvent="pushTask" -->
   <content-box>
     <task-body
       v-for="tasks in taskArray"
       :id="tasks.id"
       :taskText="tasks.taskText"
-      @keydown.enter="refreshTasks"
+      @keydown.enter="pushTask"
     ></task-body>
   </content-box>
 </template>
@@ -19,41 +20,17 @@ export default {
   },
   data() {
     return {
-      taskArray: []
-    };
+      taskArray: this.$store.state.taskArray
+    }
   },
   methods: {
-    refreshTasks() {
-      this.isLoading = true;
-      this.error = null;
-      fetch("https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json")
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then((data) => {
-          this.isLoading = false;
-          const task = [];
-          for (const id in data) {
-            task.splice(task.length, 0, {
-              id: id,
-              taskText: data[id].taskText,
-            });
-            this.taskArray = task;
-            console.log(this.taskArray)
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-          this.error = 'Failed to load data - please try again later!';
-        });
+    pushTask() {
+      this.$store.dispatch('refreshTasks');
     }
-    },
-    mounted() {
-      this.refreshTasks();
-    }
+  },
+  mounted() {
+       this.$store.dispatch('refreshTasks'); 
+  }
 };
 </script>
 

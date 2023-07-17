@@ -11,7 +11,7 @@
       id="insertField"
       type="text"
       v-model="taskText"
-      @keydown.enter="submitData"
+      @keydown.enter="submitTask(taskText)"
     /><span class="material-symbols-sharp">
       refresh
     </span>
@@ -22,26 +22,15 @@
 export default {
   data() {
     return {
-      taskText: "",
-    };
-  },
+      taskText: ''
+      // taskText() {
+      //   return this.$store.getters.taskText;
+      // }
+      }
+      },
   methods: {
-    submitData() {
-      fetch(
-        "https://task-project-d7290-default-rtdb.firebaseio.com/tasks.json",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: this.id,
-            taskText: this.taskText,
-          }),
-        }   
-      ); 
-      document.getElementById("insertField").value = "";
-      this.$emit('someEvent')
+    submitTask(newTask) {
+      this.$store.commit('submitData', newTask);
     }
   }
 };
