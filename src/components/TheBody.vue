@@ -1,14 +1,20 @@
 <template>
   <div>
+  <li 
+    v-for="tasks in taskArray"
+    :key="tasks.id"
+    :taskText="tasks.taskText"
+    @keydown.enter="pushTask">
     <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-  /> 
-  <span>-</span> 
+    />
+  <span>-</span>
   <span
       >{{ taskArray.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
       <hr
     /></span>
+  </li> 
   </div>
 </template>
 
@@ -17,7 +23,15 @@ export default {
   data() {
     return {
       taskArray: this.$store.state.taskArray
-    }   
+    }
+  },
+  methods: {
+    pushTask() {
+      this.$store.dispatch('refreshTasks');
+    }
+  },
+  mounted() {
+       this.$store.dispatch('refreshTasks'); 
   }
 };
 </script>

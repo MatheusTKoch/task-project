@@ -2,12 +2,7 @@
   <main-header></main-header>
   <!-- @someEvent="pushTask" -->
   <content-box>
-    <task-body
-      v-for="tasks in taskArray"
-      :id="tasks.id"
-      :taskText="tasks.taskText"
-      @keydown.enter="pushTask"
-    ></task-body>
+    <task-body></task-body>
   </content-box>
 </template>
 
@@ -17,19 +12,6 @@ import ContentBox from "./components/UI/ContentBox.vue";
 export default {
   components: {
     ContentBox
-  },
-  data() {
-    return {
-      taskArray: this.$store.state.taskArray
-    }
-  },
-  methods: {
-    pushTask() {
-      this.$store.dispatch('refreshTasks');
-    }
-  },
-  mounted() {
-       this.$store.dispatch('refreshTasks'); 
   }
 };
 </script>
