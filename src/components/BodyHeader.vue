@@ -23,9 +23,6 @@ export default {
   data() {
     return {
       taskText: ''
-      // taskText() {
-      //   return this.$store.getters.taskText;
-      // }
       }
       },
   methods: {

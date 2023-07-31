@@ -1,5 +1,6 @@
 <template>
   <div>
+  <main-header></main-header>
   <li 
     v-for="tasks in taskArray"
     :key="tasks.id"
@@ -19,7 +20,12 @@
 </template>
 
 <script>
+import MainHeader from "./BodyHeader.vue";
+
 export default {
+  components: {
+    MainHeader
+  },
   data() {
     return {
       taskArray: this.$store.state.taskArray

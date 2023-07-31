@@ -1,18 +1,10 @@
 <template>
-  <main-header></main-header>
-  <!-- @someEvent="pushTask" -->
-  <content-box>
-    <task-body></task-body>
-  </content-box>
+    <router-view></router-view>
 </template>
 
 <script>
-import ContentBox from "./components/UI/ContentBox.vue";
-
 export default {
-  components: {
-    ContentBox
-  }
+  
 };
 </script>
 
