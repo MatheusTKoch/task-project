@@ -1,19 +1,23 @@
 <template>
-    <div>
-        <button :class="main">
-            <slot></slot>
-        </button>
-    </div>
+  <div>
+    <button :class="main">
+      <slot></slot>
+    </button>
+  </div>
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
-    data() {
-        return {
-            main: 'button-alt'
-        }
+  setup() {
+    const main = ref("button-alt");
+
+    return {
+      main
     }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -23,7 +27,7 @@ export default {
   border-radius: 4px;
   color: #3c4043;
   cursor: pointer;
-  font-family: arial,sans-serif;
+  font-family: arial, sans-serif;
   font-size: 14px;
   height: 36px;
   line-height: 27px;
@@ -38,7 +42,7 @@ export default {
 
 .button-alt:hover {
   border-color: #dadce0;
-  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
   color: #202124;
 }
 
@@ -46,5 +50,4 @@ export default {
   border-color: #4285f4;
   outline: none;
 }
-
 </style>

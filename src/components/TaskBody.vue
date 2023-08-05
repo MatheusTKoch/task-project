@@ -21,23 +21,29 @@
 
 <script>
 import MainHeader from "./BodyHeader.vue";
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   components: {
     MainHeader
   },
-  data() {
+  setup() {
+    const store = useStore();
+    const taskArray = ref(store.state.taskArray);
+
+    function pushTask() {
+      store.dispatch('refreshTasks');
+    }
+
+    onMounted(function() {
+      pushTask();
+    })
+
     return {
-      taskArray: this.$store.state.taskArray
+      taskArray,
+      pushTask
     }
-  },
-  methods: {
-    pushTask() {
-      this.$store.dispatch('refreshTasks');
-    }
-  },
-  mounted() {
-       this.$store.dispatch('refreshTasks'); 
   }
 };
 </script>

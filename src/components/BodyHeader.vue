@@ -12,24 +12,28 @@
       type="text"
       v-model="taskText"
       @keydown.enter="submitTask(taskText)"
-    /><span class="material-symbols-sharp">
-      refresh
-    </span>
+    /><span class="material-symbols-sharp"> refresh </span>
   </section>
 </template>
 
 <script>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
 export default {
-  data() {
-    return {
-      taskText: ''
-      }
-      },
-  methods: {
-    submitTask(newTask) {
-      this.$store.commit('submitData', newTask);
+  setup() {
+    const taskText = ref("");
+    const store = useStore();
+
+    function submitTask(newTask) {
+      store.commit("submitData", newTask);
     }
-  }
+
+    return {
+      taskText,
+      submitTask,
+    };
+  },
 };
 </script>
 
