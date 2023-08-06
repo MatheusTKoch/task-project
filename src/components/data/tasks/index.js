@@ -3,7 +3,8 @@ import getters from './getters.js';
 import mutations from './mutations.js';
 
 export default {
-    data () {
+    namespace: true,
+    state() {
         return {
             taskArray: [],
             taskText: ""
