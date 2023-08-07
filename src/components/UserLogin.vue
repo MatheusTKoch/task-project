@@ -1,48 +1,33 @@
 <template>
     <content-box>
-        <form>
             <h1>The Task Project</h1>
             <h3>Please login or signup to start your task list!</h3>
-            <div>
-            <label for="username">Username</label>
-            <input type="text" for="username"/>
-            </div>
-            <div>
-            <label for="password">Password</label>
-            <input type="text" for="password"/>
-            </div>
-            <span>
-            <base-button>{{ buttonPrimary }}</base-button>
-            </span>
-            <span>
-            <base-button @click.prevent="switchText">{{ buttonSecondary }}</base-button>    
-            </span>    
-        </form>
+            <login-component @emit-user="signupOrLogin"></login-component>   
     </content-box>
 </template>
 
 <script>
-import { ref } from 'vue';
+import LoginComponent from './LoginComponent.vue';
+import { useStore } from 'vuex';
 
 export default {
+    components: {
+        LoginComponent
+    },
     setup() {
-        const buttonPrimary = ref('Login');
-        const buttonSecondary = ref('Signup Instead');
+        const store = useStore()
 
-        function switchText() {
-            if (buttonPrimary.value === 'Login') {
-                buttonPrimary.value = 'Signup';
-                buttonSecondary.value = 'Login Instead';
-            } else {
-                buttonPrimary.value = 'Login';
-                buttonSecondary.value = 'Signup Instead'
-            }
+        function signupOrLogin(data) {
+            store.dispatch('user/registerUser', data)
+            // if (buttonPrimary.value === 'Login') {
+            //     store.dispatch('user/loginUser', data)
+            // } else if (buttonPrimary.value === 'Signup') {
+            //     store.dispatch('user/registerUser', data)
+            // }
         }
 
         return {
-            buttonPrimary,
-            buttonSecondary,
-            switchText
+            signupOrLogin
         }
     }
 }
