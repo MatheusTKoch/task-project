@@ -18,12 +18,13 @@ export default {
         const store = useStore()
 
         function signupOrLogin(data) {
-            store.dispatch('user/registerUser', data)
+            store.dispatch('registerUser', data)
             // if (buttonPrimary.value === 'Login') {
             //     store.dispatch('user/loginUser', data)
             // } else if (buttonPrimary.value === 'Signup') {
             //     store.dispatch('user/registerUser', data)
             // }
+
         }
 
         return {
