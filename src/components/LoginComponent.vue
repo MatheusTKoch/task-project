@@ -40,7 +40,7 @@ export default {
         }
 
         function emitUser() {
-            context.emit('emit-user', username, password);
+            context.emit('emit-user', [username.value, password.value, buttonPrimary.value]);
             username.value = '';
             password.value = '';
         }

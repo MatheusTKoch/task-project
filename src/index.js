@@ -5,8 +5,8 @@ import user from "./components/data/user/index.js";
 
 const store = createStore({
   modules: {
-    task,
-    user
+    task: task,
+    user: user
   },
 });
 
