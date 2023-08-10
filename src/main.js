@@ -5,6 +5,13 @@ import store from "./index.js";
 import App from "./App.vue";
 import contentBox from "./components/UI/ContentBox.vue";
 import BaseButton from "./components/UI/BaseButton.vue";
+import firebase from "firebase";
+
+const firebaseConfig = {
+    
+  };
+
+firebase.initializeApp(firebaseConfig);
 
 const app = createApp(App);
 

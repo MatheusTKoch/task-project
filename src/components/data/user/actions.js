@@ -7,7 +7,7 @@ export default {
     };
 
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBdZwMm5w7vRAmiRJXDlUr8NGcRPffqGCs",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=",
       {
         method: "POST",
         body: JSON.stringify(user),
@@ -24,7 +24,7 @@ export default {
     };
 
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBdZwMm5w7vRAmiRJXDlUr8NGcRPffqGCs",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=",
       {
         method: "POST",
         body: JSON.stringify(user),

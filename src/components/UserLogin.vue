@@ -9,7 +9,9 @@
 <script>
 import LoginComponent from "./LoginComponent.vue";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { onErrorCaptured, ref } from "vue";
+import { useRouter } from "vue-router";
+import firebase from "firebase";
 
 export default {
   components: {
@@ -17,6 +19,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     function signupOrLogin(emitInfo) {
       const username = ref(emitInfo[0]);
@@ -24,9 +27,23 @@ export default {
       const buttonText = ref(emitInfo[2]);
 
       if (buttonText.value === "Login") {
-        store.dispatch("user/loginUser", [username, password]);
+        // store.dispatch("user/loginUser", [username, password]);
+        firebase.auth().signInWithEmailAndPassword(username, password).then((data) => {
+          router.replace('/tasks');
+        })
+        .catch(error => {
+          console.log(error.code)
+          alert(error.message);
+        })
       } else if (buttonText.value === "Signup") {
-        store.dispatch("user/addNewUser", [username, password]);
+        // store.dispatch("user/addNewUser", [username, password]);
+        firebase.auth().createUserWithEmailAndPassword(username, password).then((data) => {
+          router.replace('/tasks');
+        })
+        .catch(error => {
+          console.log(error.code)
+          alert(error.message);
+        })
       }
     }
 
