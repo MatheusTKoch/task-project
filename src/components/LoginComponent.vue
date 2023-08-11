@@ -1,11 +1,11 @@
 <template>
   <form>
     <div>
-      <label for="username">Username</label>
+      <label for="username">Username: </label>
       <input type="text" for="username" v-model="username"/>
     </div>
     <div>
-      <label for="password">Password</label>
+      <label for="password">Password: </label>
       <input type="text" for="password" v-model="password"/>
     </div>
     <span>

@@ -39,7 +39,6 @@ export default {
             }),
           }   
         )
-        // then(this.$emit('someEvent')); 
         document.getElementById("insertField").value = "";
         console.log(this.taskArray)
       }

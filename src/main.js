@@ -8,7 +8,7 @@ import BaseButton from "./components/UI/BaseButton.vue";
 import firebase from "firebase";
 
 const firebaseConfig = {
-    
+  
   };
 
 firebase.initializeApp(firebaseConfig);
