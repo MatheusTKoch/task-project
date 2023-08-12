@@ -13,25 +13,47 @@
       v-model="taskText"
       @keydown.enter="submitTask(taskText)"
     /><span class="material-symbols-sharp"> refresh </span>
+    <base-button @click="logoutUser">Logout User</base-button>
   </section>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import firebase from "firebase";
 
 export default {
   setup() {
     const taskText = ref("");
     const store = useStore();
+    const router = useRouter();
 
     function submitTask(newTask) {
       store.commit("submitData", newTask);
     }
 
+    function logoutUser() {
+      firebase.auth().signOut();
+      router.replace("/login");
+    }
+
+    function checkUserLogged() {
+      const userLogged = firebase.auth().onAuthStateChanged(function (logged) {
+        if (!logged) {
+          router.replace("/");
+        }
+      });
+    }
+
+    onBeforeUnmount(() => {
+      checkUserLogged();
+    });
+
     return {
       taskText,
       submitTask,
+      logoutUser,
     };
   },
 };

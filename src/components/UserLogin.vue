@@ -17,7 +17,7 @@ import firebase from "firebase";
 export default {
   components: {
     LoginComponent,
-    ErrorMessage
+    ErrorMessage,
   },
   setup() {
     const router = useRouter();
@@ -26,9 +26,9 @@ export default {
     function signupOrLogin(emitInfo) {
       const username = ref(emitInfo[0]);
       const password = ref(emitInfo[1]);
-      const buttonText = ref(emitInfo[2]); 
-      
-      errMsg.value = '';
+      const buttonText = ref(emitInfo[2]);
+
+      errMsg.value = "";
 
       if (buttonText.value === "Login") {
         firebase
@@ -37,7 +37,7 @@ export default {
           .then(() => {
             router.replace("/tasks");
           })
-          .catch(error => {
+          .catch((error) => {
             switch (error.code) {
               case "auth/invalid-email":
                 errMsg.value = "Invalid email";
@@ -69,8 +69,9 @@ export default {
 
     return {
       signupOrLogin,
-      errMsg
+      errMsg,
     };
   },
 };
 </script>
+

@@ -11,10 +11,12 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
   <span>-</span>
+  <transition-group tag="span" name="tasks-list">
   <span
       >{{ taskArray.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
       <hr
     /></span>
+  </transition-group>
   </li> 
   </div>
 </template>
@@ -48,8 +50,37 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+
+.tasks-list-enter-from {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.tasks-list-enter-active {
+    transition: all 1s ease-out;
+}
+
+.tasks-list-enter-to,
+.tasks-list-leave-from {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tasks-list-leave-active {
+    transition: all 1s ease-in;
+    position: absolute;
+}
+
+.tasks-list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.tasks-list-move {
+    transition: transform 0.8s ease;
 }
 </style>
