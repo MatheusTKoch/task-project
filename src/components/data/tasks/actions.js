@@ -1,8 +1,15 @@
+import firebase from "firebase";
+
 export default {
-    refreshTasks(context) {
-        context.commit('refreshTasks');
-    },
-    submitData(context) {
-        context.commit('submitData');
-    }
+    async refreshTasks(context) {
+        
+      },
+    async submitData(context, data) {
+        const taskText = data.toString();
+        const postTaskRef = firebase.database().ref('tasks');
+        const newTaskRef = postTaskRef.push();
+        newTaskRef.set({
+            'taskText': taskText
+        })
+}
 }

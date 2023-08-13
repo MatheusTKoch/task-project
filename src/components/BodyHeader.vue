@@ -25,12 +25,13 @@ import firebase from "firebase";
 
 export default {
   setup() {
-    const taskText = ref("");
+    const taskText = ref('');
     const store = useStore();
     const router = useRouter();
 
-    function submitTask(newTask) {
-      store.commit("submitData", newTask);
+    function submitTask(data) {
+      store.dispatch("submitData", taskText.value);
+        taskText.value = '';
     }
 
     function logoutUser() {
