@@ -1,52 +1,59 @@
 <template>
   <div>
-  <main-header></main-header>
-  <li 
-    v-for="tasks in taskArray"
-    :key="tasks.id"
-    :taskText="tasks.taskText"
-    @keydown.enter="pushTask">
-    <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-  <span>-</span>
-  <transition-group tag="span" name="tasks">
-  <span
-      >{{ taskArray.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
-      <hr
-    /></span>
-  </transition-group>
-  </li> 
+    <main-header></main-header>
+    <ul
+      v-for="tasks in taskArray"
+      :key="tasks.id"
+      @keydown.enter="pushTask"
+    >
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      />
+      <span>-</span>
+      <!-- <transition-group tag="span" name="tasks"> -->
+      <li>
+        {{ tasks.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
+        <hr />
+      </li>
+      <!-- </transition-group> -->
+    </ul>
   </div>
 </template>
 
 <script>
 import MainHeader from "./BodyHeader.vue";
-import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { ref, onBeforeMount } from "vue";
+import { useStore } from "vuex";
+import firebase from "firebase";
 
 export default {
   components: {
-    MainHeader
+    MainHeader,
   },
   setup() {
     const store = useStore();
-    const taskArray = ref(store.state.taskArray);
+    const taskArray = ref();
 
     function pushTask() {
-      store.dispatch('refreshTasks');
+      var taskCountRef = firebase
+        .database()
+        .ref("tasks");
+      taskCountRef.on("value", (snapshot) => {
+        taskArray.value = snapshot.val();
+      });
+      store.dispatch("refreshTasks");
     }
 
-    onMounted(function() {
+    onBeforeMount(function () {
       pushTask();
-    })
+    });
 
     return {
       taskArray,
-      pushTask
-    }
-  }
+      pushTask,
+    };
+  },
 };
 </script>
 
@@ -56,31 +63,31 @@ export default {
 }
 
 .tasks-enter-from {
-    opacity: 0;
-    transform: translateX(-30px);
+  opacity: 0;
+  transform: translateX(-30px);
 }
 
 .tasks-enter-active {
-    transition: all 1s ease-out;
+  transition: all 1s ease-out;
 }
 
 .tasks-enter-to,
 .tasks-leave-from {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .tasks-leave-active {
-    transition: all 1s ease-in;
-    position: absolute;
+  transition: all 1s ease-in;
+  position: absolute;
 }
 
 .tasks-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
+  opacity: 0;
+  transform: translateX(30px);
 }
 
 .tasks-move {
-    transition: transform 0.8s ease;
+  transition: transform 0.8s ease;
 }
 </style>
