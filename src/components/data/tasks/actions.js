@@ -16,4 +16,8 @@ export default {
       taskText: taskText,
     });
   },
+  async deleteTask(context, data) {
+    const taskRemoved = data;
+    const deleteTaskRef = firebase.database().remove(taskRemoved);
+  }
 };

@@ -1,21 +1,17 @@
 <template>
   <div>
     <main-header></main-header>
-    <ul
-      v-for="tasks in taskArray"
-      :key="tasks.id"
-      @keydown.enter="pushTask"
-    >
+    <ul v-for="tasks in taskArray" :key="tasks.id" @keydown.enter="pushTask">
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
       />
-      <span>-</span>
+
       <!-- <transition-group tag="span" name="tasks"> -->
-      <li>
-        {{ tasks.taskText }}<a><span class="material-symbols-outlined"> delete </span></a>
+      <div>
+        {{ tasks.taskText }}<a><span></span><span class="material-symbols-outlined" @click="deleteData"> delete </span></a>
         <hr />
-      </li>
+      </div>
       <!-- </transition-group> -->
     </ul>
   </div>
@@ -31,18 +27,20 @@ export default {
   components: {
     MainHeader,
   },
-  setup() {
+  setup(props, context) {
     const store = useStore();
     const taskArray = ref();
 
     function pushTask() {
-      var taskCountRef = firebase
-        .database()
-        .ref("tasks");
+      var taskCountRef = firebase.database().ref("tasks");
       taskCountRef.on("value", (snapshot) => {
         taskArray.value = snapshot.val();
       });
       store.dispatch("refreshTasks");
+    }
+
+    function deleteData() {
+      
     }
 
     onBeforeMount(function () {
@@ -52,6 +50,7 @@ export default {
     return {
       taskArray,
       pushTask,
+      deleteData
     };
   },
 };

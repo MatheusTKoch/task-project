@@ -1,9 +1,5 @@
 <template>
   <section>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
     <p>My Tasks</p>
     <div>Add a task below (with Enter) and click over the finished tasks</div>
     <br />
@@ -12,8 +8,7 @@
       type="text"
       v-model="taskText"
       @keydown.enter="submitTask(taskText)"
-    /><span class="material-symbols-sharp"> refresh </span>
-    <base-button @click="logoutUser">Logout User</base-button>
+    /><base-button @click="logoutUser">Logout User</base-button>
   </section>
 </template>
 
@@ -84,7 +79,4 @@ hr {
   width: fit-content;
 }
 
-.material-symbols-sharp {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
-}
 </style>
