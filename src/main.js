@@ -7,6 +7,7 @@ import App from "./App.vue";
 import contentBox from "./components/UI/ContentBox.vue";
 import BaseButton from "./components/UI/BaseButton.vue";
 import firebase from "firebase";
+import './index.css'
 
 const firebaseConfig = {
   

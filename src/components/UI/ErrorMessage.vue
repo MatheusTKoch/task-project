@@ -1,21 +1,12 @@
 <template>
   <div>
     <transition name="message">
-      <p><slot></slot></p>
+      <p class="text-base text-red-600"><slot></slot></p>
     </transition>
   </div>
 </template>
 
-<script>
-export default {};
-</script>
-
 <style scoped>
-p {
-  font-size: medium;
-  color: red;
-}
-
 .message-enter-active {
   animation: modal 0.3s ease-out;
 }

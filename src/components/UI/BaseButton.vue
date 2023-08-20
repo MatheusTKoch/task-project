@@ -1,53 +1,9 @@
 <template>
   <div>
-    <button :class="main">
+    <button class="bg-white hover:bg-gray-100 text-gray-800 py-2 px-4 border border-gray-400 rounded shadow">
       <slot></slot>
     </button>
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
 
-export default {
-  setup() {
-    const main = ref("button-alt");
-
-    return {
-      main
-    }
-  },
-};
-</script>
-
-<style scoped>
-.button-alt {
-  background-color: #f8f9fa;
-  border: 1px solid #f8f9fa;
-  border-radius: 4px;
-  color: #3c4043;
-  cursor: pointer;
-  font-family: arial, sans-serif;
-  font-size: 14px;
-  height: 36px;
-  line-height: 27px;
-  min-width: 54px;
-  padding: 0 16px;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: pre;
-}
-
-.button-alt:hover {
-  border-color: #dadce0;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
-  color: #202124;
-}
-
-.button-alt:focus {
-  border-color: #4285f4;
-  outline: none;
-}
-</style>

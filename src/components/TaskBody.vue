@@ -9,7 +9,7 @@
 
       <!-- <transition-group tag="span" name="tasks"> -->
       <div>
-        {{ tasks.taskText }}<a><span></span><span class="material-symbols-outlined" @click="deleteData"> delete </span></a>
+        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined" @click="deleteData"> delete </span></base-button>
         <hr />
       </div>
       <!-- </transition-group> -->
@@ -37,10 +37,12 @@ export default {
         taskArray.value = snapshot.val();
       });
       store.dispatch("refreshTasks");
+      
     }
 
     function deleteData() {
-      
+      console.log(taskArray.key)
+      store.dispatch("deleteTask", taskArray.key)
     }
 
     onBeforeMount(function () {

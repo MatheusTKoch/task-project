@@ -1,16 +1,8 @@
 <template>
   <br />
-  <div>
+  <div
+    class="rounded-xl shadow-md p-10 w-fit mx-auto m-32-auto place-content-center grid place-items-center"
+  >
     <slot></slot>
   </div>
 </template>
-
-<style scoped>
-div {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 1rem;
-  margin: 2rem auto;
-  max-width: 40rem;
-} 
-</style>
