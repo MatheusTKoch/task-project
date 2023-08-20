@@ -1,18 +1,18 @@
 <template>
   <form>
     <div>
-      <label for="username">Username: </label>
-      <input type="text" for="username" v-model="username"/>
+      <label for="username" class="font-medium text-xl" >Email: </label>
+      <input type="text" for="username" v-model="username" class="border-black"/>
     </div>
     <div>
-      <label for="password">Password: </label>
-      <input type="text" for="password" v-model="password"/>
+      <label for="password" class="font-medium text-xl" min="6" max="15">Password: </label>
+      <input type="text" for="password" v-model="password" class="out-of-range:border-red-500 border-black"/>
     </div>
-    <span>
-      <base-button @click.prevent="emitUser">{{ buttonPrimary }}</base-button>
+    <span class="p-0.5">
+      <base-button @click.prevent="emitUser" class="font-semibold">{{ buttonPrimary }}</base-button>
     </span>
-    <span>
-      <base-button @click.prevent="switchText">{{
+    <span class="p-0.5">
+      <base-button @click.prevent="switchText" class="font-semibold">{{
         buttonSecondary
       }}</base-button>
     </span>

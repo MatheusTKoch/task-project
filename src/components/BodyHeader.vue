@@ -1,14 +1,14 @@
 <template>
   <section>
-    <p>My Tasks</p>
-    <div>Add a task below (with Enter) and click over the finished tasks</div>
-    <br />
+    <base-header><base-button class="px-1 text-sm font-semibold" @click="logoutUser">Logout User</base-button></base-header>
+    <p class="text-3xl font-semibold p-3">My Tasks</p>
+    <div class="text-2xl font-normal">Add a task below (with Enter) and click over the finished tasks</div>
     <input
       id="insertField"
       type="text"
       v-model="taskText"
       @keydown.enter="submitTask(taskText)"
-    /><base-button @click="logoutUser">Logout User</base-button>
+    />
   </section>
 </template>
 
@@ -17,8 +17,12 @@ import { onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import firebase from "firebase";
+import BaseHeader from "./UI/BaseHeader.vue";
 
 export default {
+  components: {
+    BaseHeader
+  },
   setup() {
     const taskText = ref('');
     const store = useStore();
@@ -56,13 +60,6 @@ export default {
 </script>
 
 <style scoped>
-p {
-  font-size: 50px;
-}
-
-div {
-  font-size: 20px;
-}
 
 input {
   border: 0.25px solid;

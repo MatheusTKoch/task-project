@@ -1,7 +1,12 @@
 <template>
+  <base-header>
+     <div class="py-0 px-3 font-semibold">Task Project</div>
+  </base-header>
   <content-box>
-    <h1>The Task Project</h1>
-    <h3>Please login or signup to start your task list!</h3>
+    <h1 class="font-semibold text-3xl p-4">The Task Project</h1>
+    <h3 class="font-medium text-2xl p-2">
+      Please login or signup to start your task list!
+    </h3>
     <login-component @emit-user="signupOrLogin"></login-component>
     <error-message v-if="errMsg">{{ errMsg }}</error-message>
   </content-box>
@@ -13,11 +18,13 @@ import ErrorMessage from "./UI/ErrorMessage.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import firebase from "firebase";
+import BaseHeader from "./UI/BaseHeader.vue";
 
 export default {
   components: {
     LoginComponent,
     ErrorMessage,
+    BaseHeader,
   },
   setup() {
     const router = useRouter();
@@ -74,4 +81,3 @@ export default {
   },
 };
 </script>
-
