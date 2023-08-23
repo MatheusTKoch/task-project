@@ -2,7 +2,7 @@
   <section>
     <base-header><base-button class="px-1 text-sm font-semibold" @click="logoutUser">Logout User</base-button></base-header>
     <p class="text-3xl font-semibold p-3">My Tasks</p>
-    <div class="text-2xl font-normal">Add a task below (with Enter) and click over the finished tasks</div>
+    <div class="text-2xl font-normal pb-5">Add a task below (with Enter) and click over the finished tasks</div>
     <input
       id="insertField"
       type="text"
