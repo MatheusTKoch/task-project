@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@firebase/database": "^1.0.1",
+    "@formkit/auto-animate": "^0.7.0",
     "firebase": "^8.6.8",
     "vue": "^3.3.4",
     "vue-router": "^4.0.13",

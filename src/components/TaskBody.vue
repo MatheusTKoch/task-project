@@ -5,11 +5,13 @@
       />
   <div>
     <main-header></main-header>
+    <div v-auto-animate>
     <ul v-for="tasks in taskArray" :key="tasks.id" @keydown.enter="pushTask" class="list-disc">
       <li class="p-3 font-normal text-2xl">
         {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData"> delete </span></base-button>
       </li>
     </ul>
+  </div>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
     }
 
     function deleteData() {
-      console.log(taskArray.key)
+      console.log(taskArray)
       store.dispatch("deleteTask", taskArray.key)
     }
 
