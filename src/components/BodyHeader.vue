@@ -28,7 +28,7 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    function submitTask(data) {
+    function submitTask() {
       store.dispatch("submitData", taskText.value);
         taskText.value = '';
     }
@@ -65,15 +65,6 @@ input {
   border: 0.25px solid;
   border-radius: 7px;
   width: 400px;
-}
-
-span {
-  text-align: center;
-  padding: 2px;
-}
-
-hr {
-  width: fit-content;
 }
 
 </style>

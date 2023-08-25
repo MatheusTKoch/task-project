@@ -12,12 +12,16 @@ export default {
     const taskText = data.toString();
     const postTaskRef = firebase.database().ref("tasks");
     const newTaskRef = postTaskRef.push();
+    const currentUser = firebase.auth().currentUser.uid;
     newTaskRef.set({
       taskText: taskText,
+      userUID: currentUser
     });
   },
   async deleteTask(context, data) {
     const taskRemoved = data;
     const deleteTaskRef = firebase.database();
+    deleteTaskRef.remove(taskRemoved);
+    
   }
 };
