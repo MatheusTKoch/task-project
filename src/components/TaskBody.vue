@@ -40,17 +40,20 @@ export default {
     });
 
     onUpdated(function () {
-      currentUser.value = firebase.auth().currentUser.uid;
+      currentUser.value = firebase.auth().currentUser.uid.toString();
     });
 
     function pushTask() {  
       var taskCountRef = firebase.database().ref("tasks");
       taskCountRef.on("value", (snapshot) => {
-        var taskArrayUnfiltered = snapshot.val();
-        var convertArray = Object.entries(taskArrayUnfiltered);
-        var convertArrayFiltered = convertArray.filter((userUID) => userUID === currentUser);
+        const taskArrayUnfiltered = snapshot.val();
+        const convertArray = Object.entries(taskArrayUnfiltered);
+        const convertArrayFiltered = convertArray.filter( convertArray => {
+          return convertArray === currentUser.value
+        });
+        console.log(currentUser)
+        console.log(convertArray[2][1].userUID)
         console.log(convertArrayFiltered)
-        console.log(currentUser.value)
         taskArray.value = Object.fromEntries(convertArrayFiltered);
       });
       store.dispatch("refreshTasks");
