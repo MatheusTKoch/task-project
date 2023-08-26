@@ -8,7 +8,7 @@
     <div v-auto-animate>
     <ul v-for="tasks in taskArray" :key="tasks.id" @keydown.enter="pushTask" class="list-disc">
       <li class="p-3 font-normal text-2xl">
-        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(tasks.taskText)"> delete </span></base-button>
+        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(tasks)"> delete </span></base-button>
       </li>
     </ul>
   </div>
@@ -32,6 +32,7 @@ export default {
 
     function deleteData(data) {
       console.log(data)
+      console.log(data.key)
       store.dispatch("deleteTask", data)
     }
 
@@ -46,15 +47,17 @@ export default {
     function pushTask() {  
       var taskCountRef = firebase.database().ref("tasks");
       taskCountRef.on("value", (snapshot) => {
-        const taskArrayUnfiltered = snapshot.val();
-        const convertArray = Object.entries(taskArrayUnfiltered);
-        const convertArrayFiltered = convertArray.filter( convertArray => {
-          return convertArray === currentUser.value
-        });
-        console.log(currentUser)
-        console.log(convertArray[2][1].userUID)
-        console.log(convertArrayFiltered)
-        taskArray.value = Object.fromEntries(convertArrayFiltered);
+        taskArray.value = snapshot.val();
+        // const taskArrayUnfiltered = snapshot.val();
+        // const convertArray = Object.entries(taskArrayUnfiltered);
+        // const convertArrayFiltered = convertArray.filter( convertArray => {
+        //   return convertArray[0][1] === currentUser.value
+        // });
+        // console.log(currentUser)
+        // console.log(convertArray[2][1].userUID)
+        // console.log(convertArrayFiltered)
+        // taskArray.value = Object.fromEntries(convertArrayFiltered);
+        // taskArray.value = taskArrayUnfiltered
       });
       store.dispatch("refreshTasks");
     }
