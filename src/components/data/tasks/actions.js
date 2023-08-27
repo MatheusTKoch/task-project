@@ -20,17 +20,10 @@ export default {
   },
   async deleteTask(context, data) {
     const dataText = data.taskText;
-    function filterIndex(searchArray, key, searchValue) {
-      for (var i = 0; i < searchArray.length; i++) {
-        if (searchArray[i][key] == searchValue) {
-          return i;
-        }
-      }
-    }
     const ref = firebase.database().ref("/tasks/").on('value', function(snapshot) {
       const refIds = Object.keys(snapshot.val());
-      const refTexts = snapshot.val();
-      const textIndex = filterIndex(refTexts, "taskText", dataText.toString());
+      const refTexts = Object.entries(snapshot.val())[0][1].taskText;
+      // const textIndex = refTexts.map(e => e.taskText).indexOf(dataText)
       // var removeRef = firebase.database().ref("/tasks/" + )
       // removeRef.remove().then(function() {
       //   console.log("Remove succeeded.")
@@ -39,9 +32,9 @@ export default {
       //   console.log("Remove failed: " + error.message)
       // });
       console.log(dataText)
-      console.log(refIds.toString())
+      console.log(refIds[0])
       console.log(refTexts)
-      console.log(textIndex)
+      // console.log(textIndex)
     })
     
   },
