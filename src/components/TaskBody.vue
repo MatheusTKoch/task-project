@@ -17,7 +17,7 @@
 
 <script>
 import MainHeader from "./BodyHeader.vue";
-import { ref, onBeforeMount, onUpdated } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import firebase from "firebase";
 
@@ -28,36 +28,24 @@ export default {
   setup(props, context) {
     const store = useStore();
     const taskArray = ref();
-    const currentUser = ref();
+    const loggedUser = ref();
 
     function deleteData(data) {
       console.log(data)
       store.dispatch("deleteTask", data)
     }
 
-    onBeforeMount(function () {
+    const getUid = firebase.auth().onAuthStateChanged(function() {
+      loggedUser.value = firebase.auth().currentUser.uid.toString(); 
       pushTask();
-    });
-
-    onUpdated(function () {
-      currentUser.value = firebase.auth().currentUser.uid.toString();
-    });
+    })
 
     function pushTask() {  
       var taskCountRef = firebase.database().ref("tasks");
-      taskCountRef.on("value", (snapshot) => {
+      taskCountRef.orderByChild('userUID').equalTo(`${loggedUser.value}`).on("value", (snapshot) => {
         taskArray.value = snapshot.val();
-        // const taskArrayUnfiltered = snapshot.val();
-        // const convertArray = Object.entries(taskArrayUnfiltered);
-        // const convertArrayFiltered = convertArray.filter( convertArray => {
-        //   return convertArray[0][1] === currentUser.value
-        // });
-        // console.log(currentUser)
-        // console.log(convertArray[2][1].userUID)
-        // console.log(convertArrayFiltered)
-        // taskArray.value = Object.fromEntries(convertArrayFiltered);
-        // taskArray.value = taskArrayUnfiltered
       });
+      console.log(loggedUser.value)
       store.dispatch("refreshTasks");
     }
 
