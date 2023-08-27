@@ -6,9 +6,9 @@
   <div>
     <main-header></main-header>
     <div v-auto-animate>
-    <ul v-for="tasks in taskArray" :key="tasks.id" @keydown.enter="pushTask" class="list-disc">
+    <ul v-for="(tasks, index) in taskArray" :key="index" @keydown.enter="pushTask" class="list-disc">
       <li class="p-3 font-normal text-2xl">
-        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(tasks)"> delete </span></base-button>
+        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(index)"> delete </span></base-button>
       </li>
     </ul>
   </div>
@@ -32,7 +32,6 @@ export default {
 
     function deleteData(data) {
       console.log(data)
-      console.log(data.key)
       store.dispatch("deleteTask", data)
     }
 
