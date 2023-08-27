@@ -10,13 +10,17 @@ export default {
   },
   async submitData(context, data) {
     const taskText = data.toString();
-    const postTaskRef = firebase.database().ref("tasks");
-    const newTaskRef = postTaskRef.push();
-    const currentUser = firebase.auth().currentUser.uid;
-    newTaskRef.set({
-      taskText: taskText,
-      userUID: currentUser,
-    });
+    if (taskText === '') {
+      return;
+    } else {
+      const postTaskRef = firebase.database().ref("tasks");
+      const newTaskRef = postTaskRef.push();
+      const currentUser = firebase.auth().currentUser.uid;
+       newTaskRef.set({
+        taskText: taskText,
+        userUID: currentUser,
+      });
+    } 
   },
   async deleteTask(context, data) {
     const dataText = data.toString();
