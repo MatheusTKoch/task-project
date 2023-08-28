@@ -16,7 +16,6 @@ const firebaseConfig = {
 const app = createApp(App);
 
 firebase.initializeApp(firebaseConfig);
-
 firebase.database();
 
 
