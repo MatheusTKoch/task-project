@@ -1,6 +1,9 @@
 <template>
   <base-header>
      <div class="py-0 px-3 font-semibold">Task Project</div>
+     <div></div>
+     <Icon icon="openmoji:flag-brazil" color="black" />
+     <Icon icon="openmoji:flag-united-states" color="black" />
   </base-header>
   <content-box>
     <h1 class="font-semibold text-3xl p-4">The Task Project</h1>
@@ -19,12 +22,14 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import firebase from "firebase";
 import BaseHeader from "./UI/BaseHeader.vue";
+import { Icon } from "@iconify/vue";
 
 export default {
   components: {
     LoginComponent,
     ErrorMessage,
     BaseHeader,
+    Icon
   },
   setup() {
     const router = useRouter();
