@@ -18,8 +18,6 @@ const app = createApp(App);
 firebase.initializeApp(firebaseConfig);
 firebase.database();
 
-
-
 app.component("content-box", contentBox);
 app.component("base-button", BaseButton);
 app.use(autoAnimatePlugin);

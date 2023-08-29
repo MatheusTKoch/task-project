@@ -86,7 +86,6 @@ export default {
       } else if (showHide.value === true) {
         showHide.value = false;
       }
-      console.log(showHide)
     }
 
     return {

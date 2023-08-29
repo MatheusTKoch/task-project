@@ -1,9 +1,24 @@
 <template>
   <base-header>
      <div class="py-0 px-3 font-semibold">Task Project</div>
-     <div></div>
-     <Icon icon="openmoji:flag-brazil" color="black" />
-     <Icon icon="openmoji:flag-united-states" color="black" />
+     <div class="overflow-hidden relative">
+     <Menu>
+      <MenuButton>English<Icon icon="raphael:arrowdown" color="black" /></MenuButton>
+      <transition
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100"
+      leave-active-class="transition duration-75 ease-out"
+      leave-from-class="transform scale-100 opacity-100"
+      leave-to-class="transform scale-95 opacity-0"
+    >
+      <MenuItems>
+        <MenuItem><a href="#"><Icon icon="openmoji:flag-united-states" color="black" />English</a></MenuItem>
+        <MenuItem><a href="#"><Icon icon="openmoji:flag-brazil" color="black" />Brazilian Portuguese</a></MenuItem>
+      </MenuItems>
+    </transition> 
+    </Menu>
+    </div>
   </base-header>
   <content-box>
     <h1 class="font-semibold text-3xl p-4">The Task Project</h1>
@@ -23,13 +38,18 @@ import { useRouter } from "vue-router";
 import firebase from "firebase";
 import BaseHeader from "./UI/BaseHeader.vue";
 import { Icon } from "@iconify/vue";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue"; 
 
 export default {
   components: {
     LoginComponent,
     ErrorMessage,
     BaseHeader,
-    Icon
+    Icon,
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem
   },
   setup() {
     const router = useRouter();
