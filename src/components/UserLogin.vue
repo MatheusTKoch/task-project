@@ -1,6 +1,20 @@
 <template>
   <base-header>
      <div class="py-0 px-3 font-semibold">Task Project</div>
+     <div class="flex">
+      <Icon icon="iconamoon:mode-light" color="black" width="26" height="26" />
+      <Switch
+        v-model="darkMode"
+        :class="darkMode ? 'bg-gray-900' : 'bg-gray-700'" 
+        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+      >
+        <span
+          :class='darkMode ? "translate-x-6" : "translate-x-1"'
+          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+        ></span>
+      </Switch>
+      <Icon icon="material-symbols:dark-mode-outline" color="black" width="26" height="26" />
+     </div>
      <div class="overflow-hidden relative">
      <Menu>
       <MenuButton>English<Icon icon="raphael:arrowdown" color="black" /></MenuButton>
@@ -13,8 +27,8 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems>
-        <MenuItem><a href="#"><Icon icon="openmoji:flag-united-states" color="black" />English</a></MenuItem>
-        <MenuItem><a href="#"><Icon icon="openmoji:flag-brazil" color="black" />Brazilian Portuguese</a></MenuItem>
+        <MenuItem><a href="#" class="flex"><Icon icon="openmoji:flag-united-states" color="black" />English</a></MenuItem>
+        <MenuItem><a href="#" class="flex"><Icon icon="openmoji:flag-brazil" color="black" />Brazilian Portuguese</a></MenuItem>
       </MenuItems>
     </transition> 
     </Menu>
@@ -38,7 +52,7 @@ import { useRouter } from "vue-router";
 import firebase from "firebase";
 import BaseHeader from "./UI/BaseHeader.vue";
 import { Icon } from "@iconify/vue";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue"; 
+import { Menu, MenuButton, MenuItems, MenuItem, Switch } from "@headlessui/vue"; 
 
 export default {
   components: {
@@ -49,11 +63,13 @@ export default {
     Menu,
     MenuButton,
     MenuItems,
-    MenuItem
+    MenuItem,
+    Switch
   },
   setup() {
     const router = useRouter();
     const errMsg = ref();
+    const darkMode = ref(false);
 
     function signupOrLogin(emitInfo) {
       const username = ref(emitInfo[0]);
@@ -102,6 +118,7 @@ export default {
     return {
       signupOrLogin,
       errMsg,
+      darkMode
     };
   },
 };
