@@ -7,7 +7,7 @@
         v-model="darkMode"
         :class="darkMode ? 'bg-gray-900' : 'bg-gray-700'" 
         class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-      >
+        >
         <span
           :class='darkMode ? "translate-x-6" : "translate-x-1"'
           class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
@@ -15,9 +15,9 @@
       </Switch>
       <Icon icon="material-symbols:dark-mode-outline" color="black" width="26" height="26" />
      </div>
-     <div class="overflow-hidden relative">
+     <div class="absolute bottom-4 right-28">
      <Menu>
-      <MenuButton>English<Icon icon="raphael:arrowdown" color="black" /></MenuButton>
+      <MenuButton class="flex"><Icon icon="raphael:arrowdown" color="black" />English</MenuButton>
       <transition
       enter-active-class="transition duration-100 ease-out"
       enter-from-class="transform scale-95 opacity-0"
@@ -47,7 +47,7 @@
 <script>
 import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { useRouter } from "vue-router";
 import firebase from "firebase";
 import BaseHeader from "./UI/BaseHeader.vue";
@@ -77,8 +77,10 @@ export default {
       const buttonText = ref(emitInfo[2]);
 
       errMsg.value = "";
+      
 
       if (buttonText.value === "Login") {
+        console.log(darkMode)
         firebase
           .auth()
           .signInWithEmailAndPassword(username.value, password.value)
