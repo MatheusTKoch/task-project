@@ -24,7 +24,7 @@
       />
       <div class="py-1">
       <input type="checkbox" id="showPassword" @change="showHidePassword"/>
-      <label for="showPassword" class="p-1">Show Password</label>
+      <label for="showPassword" class="p-1 dark:text-white">Show Password</label>
       </div>
       <label
         for="password"

@@ -1,8 +1,8 @@
 <template>
-  <section>
+  <section class="dark:bg-sky-900">
     <base-header><base-button class="px-1 text-sm font-semibold left-10" @click="logoutUser">Logout User</base-button></base-header>
-    <p class="text-3xl font-semibold p-3">My Tasks</p>
-    <div class="text-2xl font-normal pb-5">Add a task below (with Enter) and click over the finished tasks</div>
+    <p class="text-3xl font-semibold p-3 dark:text-white">My Tasks</p>
+    <div class="text-2xl font-normal pb-5 dark:text-white">Add a task below (with Enter) and click over the finished tasks</div>
     <input
       id="insertField"
       type="text"

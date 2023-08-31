@@ -3,10 +3,10 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
       />
-  <div>
+  <div class="dark:bg-sky-900">
     <main-header></main-header>
     <div v-auto-animate>
-    <ul v-for="(tasks, index) in taskArray" :key="index" @keydown.enter="pushTask" class="list-disc">
+    <ul v-for="(tasks, index) in taskArray" :key="index" @keydown.enter="pushTask" class="list-disc dark:text-white">
       <li class="p-3 font-normal text-2xl">
         {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(index)"> delete </span></base-button>
       </li>
