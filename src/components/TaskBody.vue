@@ -1,8 +1,4 @@
 <template>
-  <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-      />
   <div class="dark:bg-gray-900">
     <main-header></main-header>
     <div v-if="isLoading">
@@ -16,7 +12,7 @@
     <div v-auto-animate>
     <ul v-for="(tasks, index) in taskArray" :key="index" @keydown.enter="pushTask" class="list-disc dark:text-white">
       <li class="p-3 font-normal text-2xl">
-        {{ tasks.taskText }}<base-button><span class="material-symbols-outlined p-0" @click="deleteData(index)"> delete </span></base-button>
+        {{ tasks.taskText }}<base-button><Icon icon="mdi-light:delete" @click="deleteData(index)"/></base-button>
       </li>
     </ul>
   </div>
@@ -29,10 +25,12 @@ import MainHeader from "./BodyHeader.vue";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import firebase from "firebase";
+import { Icon } from "@iconify/vue";
 
 export default {
   components: {
     MainHeader,
+    Icon
   },
   setup(props, context) {
     const store = useStore();
@@ -71,9 +69,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
-}
-</style>
