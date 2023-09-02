@@ -16,24 +16,6 @@
       </Switch>
       <Icon icon="material-symbols:dark-mode-outline" color="black" width="26" height="26" />
      </div>
-     <div class="absolute bottom-4 right-28">
-     <Menu>
-      <MenuButton class="flex"><Icon icon="raphael:arrowdown" color="black" />English</MenuButton>
-      <transition
-      enter-active-class="transition duration-100 ease-out"
-      enter-from-class="transform scale-95 opacity-0"
-      enter-to-class="transform scale-100 opacity-100"
-      leave-active-class="transition duration-75 ease-out"
-      leave-from-class="transform scale-100 opacity-100"
-      leave-to-class="transform scale-95 opacity-0"
-    >
-      <MenuItems>
-        <MenuItem><a href="#" class="flex"><Icon icon="openmoji:flag-united-states" color="black" />English</a></MenuItem>
-        <MenuItem><a href="#" class="flex"><Icon icon="openmoji:flag-brazil" color="black" />Brazilian Portuguese</a></MenuItem>
-      </MenuItems>
-    </transition> 
-    </Menu>
-    </div>
   </base-header>
   <content-box>
     <h1 class="font-semibold text-3xl p-4 dark:text-white">The Task Project</h1>
@@ -72,7 +54,7 @@ export default {
     const router = useRouter();
     const errMsg = ref();
     const isDark = useDark();
-    const toggleDark = useToggle(isDark)
+    const toggleDark = useToggle(isDark);
 
     function signupOrLogin(emitInfo) {
       const username = ref(emitInfo[0]);
