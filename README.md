@@ -1,10 +1,10 @@
-# task-project
+# About the Task Project
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a simple task list project made with [Vue](https://vuejs.org), [Vite](https://vitejs.dev), [Firebase](https://firebase.google.com) and [Tailwind CSS](https://tailwindcss.com).
 
-## Recommended IDE Setup
+## Other depedencies installed
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+The icons of this project are using [Iconify](https://iconify.design), the text font is from [Google Fonts](https://fonts.google.com) and the switch component is from [Headless UI](https://headlessui.com).
 
 ## Customize configuration
 
@@ -12,11 +12,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+After downloading the files please run:
+
 ```sh
 npm install
 ```
+Next step, after installing the required dependencies and creating a project in Firebase, activate the Web configuration for you project, and paste your Firebase Config exactly as it was created on the main.js file.
 
-### Compile and Hot-Reload for Development
+After installing, for running it localy please run this command:
 
 ```sh
 npm run dev
