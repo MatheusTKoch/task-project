@@ -1,3 +1,6 @@
+[! [en](https://img.shields.io/badge/lang-en-red.svg)]
+[! [pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)]
+
 # About the Task Project
 
 This is a simple task list project made with [Vue](https://vuejs.org), [Vite](https://vitejs.dev), [Firebase](https://firebase.google.com) and [Tailwind CSS](https://tailwindcss.com).
