@@ -10,7 +10,6 @@ import firebase from "firebase";
 import './index.css'
 
 const firebaseConfig = {
-  
   };
 
 const app = createApp(App);
