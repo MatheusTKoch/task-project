@@ -10,6 +10,13 @@ import firebase from "firebase";
 import './index.css'
 
 const firebaseConfig = {
+  apiKey: import.meta.API_KEY,
+  authDomain: import.meta.AUTH_DOMAIN,
+  databaseURL: import.meta.DB_URL,
+  projectId: import.meta.PROJ_ID,
+  storageBucket: import.meta.ST_BUCKET,
+  messagingSenderId: import.meta.MSG_SENDER_ID,
+  appId: import.meta.APP_ID
   };
 
 const app = createApp(App);
