@@ -10,12 +10,12 @@ import firebase from "firebase";
 import './src/index.css'; 
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_PROJ_ID,
-  storageBucket: import.meta.env.VITE_ST_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MSG_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID
+  apiKey: "AIzaSyD6rOiOiFAkse6Y3_hdzvP-Z1zRv20wrJg",
+  authDomain: "taskproject-caf25.firebaseapp.com",
+  projectId: "taskproject-caf25",
+  storageBucket: "taskproject-caf25.firebasestorage.app",
+  messagingSenderId: "1061401138693",
+  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c"
   };
 
 const app = createApp(App);
