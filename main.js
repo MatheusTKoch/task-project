@@ -1,13 +1,13 @@
 import { createApp } from "vue";
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 
-import router from "./router.js";
-import store from "./index.js";
-import App from "./App.vue";
-import contentBox from "./components/UI/ContentBox.vue";
-import BaseButton from "./components/UI/BaseButton.vue";
+import router from "./src/router.js";
+import store from "./src/index.js";
+import App from "./src/App.vue";
+import contentBox from "./src/components/UI/ContentBox.vue";
+import BaseButton from "./src/components/UI/BaseButton.vue";
 import firebase from "firebase";
-import './index.css'
+import './src/index.css';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
