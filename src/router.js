@@ -8,10 +8,10 @@ import notFound from './components/UI/NotFound.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/task-project', redirect: 'login'},
-        { path: '/task-project/login', component: userLogin },
-        { path: '/task-project/tasks', component: taskBody },
-        { path: '/task-project/:notFound(.*)', component: notFound }
+        { path: '/', redirect: 'login'},
+        { path: '/login', component: userLogin },
+        { path: '/tasks', component: taskBody },
+        { path: '/:notFound(.*)', component: notFound }
     ]
 });
 
