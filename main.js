@@ -7,7 +7,7 @@ import App from "./src/App.vue";
 import contentBox from "./src/components/UI/ContentBox.vue";
 import BaseButton from "./src/components/UI/BaseButton.vue";
 import firebase from "firebase";
-import './src/index.css';
+import './src/index.css'; 
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
