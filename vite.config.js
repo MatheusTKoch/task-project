@@ -7,7 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/task-project/',
   build: {
-    outDir: 'dist',
+    outDir: 'docs',
   },
   plugins: [
     vue(),
