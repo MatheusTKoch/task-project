@@ -15,8 +15,7 @@ const firebaseConfig = {
   projectId: "taskproject-caf25",
   storageBucket: "taskproject-caf25.firebasestorage.app",
   messagingSenderId: "1061401138693",
-  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c",
-  databaseURL: ""
+  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c"
   };
 
 const app = createApp(App);
