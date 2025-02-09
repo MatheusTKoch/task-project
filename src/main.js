@@ -10,12 +10,12 @@ import firebase from "firebase";
 import './index.css'
 
 const firebaseConfig = {
-  apiKey: import.meta.API_KEY,
-  authDomain: import.meta.AUTH_DOMAIN,
-  projectId: import.meta.PROJ_ID,
-  storageBucket: import.meta.ST_BUCKET,
-  messagingSenderId: import.meta.MSG_SENDER_ID,
-  appId: import.meta.APP_ID
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJ_ID,
+  storageBucket: import.meta.env.VITE_ST_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MSG_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID
   };
 
 const app = createApp(App);
