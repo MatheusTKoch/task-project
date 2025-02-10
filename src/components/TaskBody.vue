@@ -4,20 +4,19 @@
     <div class="my-4">
       <input
         v-model="newTaskText"
-        placeholder="Digite sua nova tarefa..."
+        placeholder="Add a new task..."
         class="border p-2 rounded w-full max-w-md"
       />
       <button
         @click="addTask"
         class="bg-blue-500 text-white px-4 py-2 rounded ml-2"
       >
-        Adicionar
+        Add
       </button>
     </div>
     <div v-if="isLoading" class="flex justify-center items-center h-32">
       <div class="spinner"></div>
     </div>
-
     <div v-else>
       <ul class="list-disc dark:text-white">
         <li
@@ -37,8 +36,8 @@
 
 <script>
 import MainHeader from "./BodyHeader.vue";
-import { ref } from "vue";
-import firebase from "firebase"; // Certifique-se de que o Firebase foi inicializado em outro lugar
+import { ref, onUnmounted } from "vue";
+import firebase from "firebase";
 import { Icon } from "@iconify/vue";
 
 export default {
@@ -52,21 +51,28 @@ export default {
     const isLoading = ref(false);
     const newTaskText = ref("");
     const loggedUser = ref(null);
-
-    firebase.auth().onAuthStateChanged((user) => {
+    let tasksRefListener = null;
+    const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         loggedUser.value = user.uid;
         fetchUserTasks();
       } else {
         loggedUser.value = null;
         taskArray.value = {};
+        if (tasksRefListener) {
+          firebase.database().ref("tasks").off("value", tasksRefListener);
+          tasksRefListener = null;
+        }
       }
     });
 
     function fetchUserTasks() {
       isLoading.value = true;
       const tasksRef = firebase.database().ref("tasks");
-      tasksRef
+      if (tasksRefListener) {
+        tasksRef.off("value", tasksRefListener);
+      }
+      tasksRefListener = tasksRef
         .orderByChild("userUID")
         .equalTo(loggedUser.value)
         .on("value", (snapshot) => {
@@ -77,7 +83,6 @@ export default {
 
     function addTask() {
       if (!loggedUser.value || !newTaskText.value.trim()) return;
-
       const tasksRef = firebase.database().ref("tasks");
       tasksRef
         .push({
@@ -88,7 +93,7 @@ export default {
           newTaskText.value = "";
         })
         .catch((error) => {
-          console.error("Erro ao adicionar tarefa:", error);
+          console.error("Error adding task:", error);
         });
     }
 
@@ -99,17 +104,22 @@ export default {
         if (taskData && taskData.userUID === loggedUser.value) {
           taskRef
             .remove()
-            .then(() => console.log("Tarefa removida com sucesso"))
+            .then(() => console.log("Task removed!"))
             .catch((error) =>
-              console.error("Erro ao remover tarefa:", error)
+              console.error("Error removing task:", error)
             );
         } else {
-          console.error(
-            "Acesso negado: esta tarefa não pertence ao usuário autenticado."
-          );
+          console.error("Access denied: task doesn't belong to user.");
         }
       });
     }
+
+    onUnmounted(() => {
+      if (tasksRefListener) {
+        firebase.database().ref("tasks").off("value", tasksRefListener);
+      }
+      unsubscribeAuth();
+    });
 
     return {
       taskArray,
