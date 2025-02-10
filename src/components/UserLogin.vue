@@ -1,32 +1,3 @@
-<template>
-  <base-header>
-     <div class="py-0 px-3 font-semibold dark:text-white">Task Project</div>
-     <div class="flex" >
-      <Icon icon="iconamoon:mode-light" color="black" width="26" height="26" />
-      <Switch
-        @click="toggleDark()"
-        v-model="isDark"
-        :class="isDark ? 'bg-gray-900' : 'bg-gray-700'" 
-        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-        >
-        <span
-          :class='isDark ? "translate-x-6" : "translate-x-1"'
-          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
-        ></span>
-      </Switch>
-      <Icon icon="material-symbols:dark-mode-outline" color="black" width="26" height="26" />
-     </div>
-  </base-header>
-  <content-box>
-    <h1 class="font-semibold text-3xl p-4 dark:text-white">The Task Project</h1>
-    <h3 class="font-medium text-2xl p-2 dark:text-white">
-      Please login or signup to start your task list!
-    </h3>
-    <login-component @emit-user="signupOrLogin"></login-component>
-    <error-message v-if="errMsg">{{ errMsg }}</error-message>
-  </content-box>
-</template>
-
 <script>
 import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
@@ -110,3 +81,32 @@ export default {
   },
 };
 </script>
+
+<template>
+  <base-header>
+     <div class="py-0 px-3 font-semibold dark:text-white">Task Project</div>
+     <div class="flex" >
+      <Icon icon="iconamoon:mode-light" color="black" width="26" height="26" />
+      <Switch
+        @click="toggleDark()"
+        v-model="isDark"
+        :class="isDark ? 'bg-gray-900' : 'bg-gray-700'" 
+        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+        >
+        <span
+          :class='isDark ? "translate-x-6" : "translate-x-1"'
+          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+        ></span>
+      </Switch>
+      <Icon icon="material-symbols:dark-mode-outline" color="black" width="26" height="26" />
+     </div>
+  </base-header>
+  <content-box>
+    <h1 class="font-semibold text-3xl p-4 dark:text-white">The Task Project</h1>
+    <h3 class="font-medium text-2xl p-2 dark:text-white">
+      Please login or signup to start your task list!
+    </h3>
+    <login-component @emit-user="signupOrLogin"></login-component>
+    <error-message v-if="errMsg">{{ errMsg }}</error-message>
+  </content-box>
+</template>
