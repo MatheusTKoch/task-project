@@ -3,12 +3,15 @@
     <base-header><base-button class="px-1 text-sm font-semibold left-10" @click="logoutUser">Logout User</base-button></base-header>
     <p class="text-3xl font-semibold p-3 dark:text-white">My Tasks</p>
     <div class="text-2xl font-normal pb-5 dark:text-white">Add a task below (with Enter) and click over the finished tasks</div>
-    <input
+    <div class="my-4">
+      <input
+      placeholder="Add a new task!"
       id="insertField"
       type="text"
       v-model="taskText"
-      @keydown.enter="submitTask(taskText)"
-    />
+      @keydown.enter="submitTask(taskText)"/>
+      <button @click="submitTask(taskText)" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Add</button>
+    </div>
   </section>
 </template>
 

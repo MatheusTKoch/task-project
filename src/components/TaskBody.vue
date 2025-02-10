@@ -1,19 +1,6 @@
 <template>
   <div class="dark:bg-gray-900 min-h-screen p-4">
     <main-header></main-header>
-    <div class="my-4">
-      <input
-        v-model="newTaskText"
-        placeholder="Add a new task..."
-        class="border p-2 rounded w-full max-w-md"
-      />
-      <button
-        @click="addTask"
-        class="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-      >
-        Add
-      </button>
-    </div>
     <div v-if="isLoading" class="flex justify-center items-center h-32">
       <div class="spinner"></div>
     </div>
