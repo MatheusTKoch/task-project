@@ -4,15 +4,15 @@
     <div v-if="isLoading" class="flex justify-center items-center h-32">
       <div class="spinner"></div>
     </div>
-    <div v-else>
-      <ul class="list-disc dark:text-white">
+    <div v-else class="flex justify-center">
+      <ul class="task-list">
         <li
           v-for="(task, key) in taskArray"
           :key="key"
-          class="p-3 font-normal text-2xl flex items-center justify-between"
+          class="task-item"
         >
           <span>{{ task.taskText }}</span>
-          <button @click="deleteTask(key)" class="text-red-500">
+          <button @click="deleteTask(key)" class="delete-btn">
             <Icon icon="mdi-light:delete" />
           </button>
         </li>
@@ -120,6 +120,30 @@ export default {
 </script>
 
 <style scoped>
+.task-list {
+  list-style-type: disc;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-left: 1rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  font-size: 1.5rem;
+}
+ 
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+}
+
 .spinner {
   width: 32px;
   height: 32px;
