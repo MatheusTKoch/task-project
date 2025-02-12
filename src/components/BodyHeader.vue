@@ -19,7 +19,7 @@
 import { onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import firebase from "firebase";
+import { AuthCredential } from "firebase/auth";
 import BaseHeader from "./UI/BaseHeader.vue"
 
 export default {
@@ -37,12 +37,12 @@ export default {
     }
 
     function logoutUser() {
-      firebase.auth().signOut();
+      AuthCredential.signOut();
       router.replace("/login");
     }
 
     function checkUserLogged() {
-      const userLogged = firebase.auth().onAuthStateChanged(function (logged) {
+      const userLogged = AuthCredential.onAuthStateChanged(function (logged) {
         if (!logged) {
           router.replace("/");
         }

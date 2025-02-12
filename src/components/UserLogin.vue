@@ -3,7 +3,7 @@ import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import firebase from "firebase";
+import { AuthCredential } from "firebase/auth";
 import BaseHeader from "./UI/BaseHeader.vue";
 import { Icon } from "@iconify/vue";
 import { Menu, MenuButton, MenuItems, MenuItem, Switch } from "@headlessui/vue";
@@ -36,8 +36,7 @@ export default {
       
       
       if (buttonText.value === "Login") {
-        firebase
-          .auth()
+        AuthCredential()
           .signInWithEmailAndPassword(username.value, password.value)
           .then(() => {
             router.replace("/tasks");
@@ -59,8 +58,7 @@ export default {
             }
           });
       } else if (buttonText.value === "Signup") {
-        firebase
-          .auth()
+        AuthCredential
           .createUserWithEmailAndPassword(username.value, password.value)
           .then(() => {
             alert("User created with success!");

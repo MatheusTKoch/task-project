@@ -24,7 +24,8 @@
 <script>
 import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
-import firebase from "firebase";
+import { Database } from "firebase/database";
+import { AuthCredential } from "firebase/auth";
 import { Icon } from "@iconify/vue";
 
 export default {
@@ -39,7 +40,7 @@ export default {
     const newTaskText = ref("");
     const loggedUser = ref(null);
     let tasksRefListener = null;
-    const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribeAuth = AuthCredential().onAuthStateChanged((user) => {
       if (user) {
         loggedUser.value = user.uid;
         fetchUserTasks();
@@ -47,7 +48,7 @@ export default {
         loggedUser.value = null;
         taskArray.value = {};
         if (tasksRefListener) {
-          firebase.database().ref("tasks").off("value", tasksRefListener);
+          Database().ref("tasks").off("value", tasksRefListener);
           tasksRefListener = null;
         }
       }
@@ -55,7 +56,7 @@ export default {
 
     function fetchUserTasks() {
       isLoading.value = true;
-      const tasksRef = firebase.database().ref("tasks");
+      const tasksRef = Database().ref("tasks");
       if (tasksRefListener) {
         tasksRef.off("value", tasksRefListener);
       }
@@ -70,7 +71,7 @@ export default {
 
     function addTask() {
       if (!loggedUser.value || !newTaskText.value.trim()) return;
-      const tasksRef = firebase.database().ref("tasks");
+      const tasksRef = Database().ref("tasks");
       tasksRef
         .push({
           taskText: newTaskText.value,
@@ -85,7 +86,7 @@ export default {
     }
 
     function deleteTask(taskKey) {
-      const taskRef = firebase.database().ref("tasks").child(taskKey);
+      const taskRef = Database().ref("tasks").child(taskKey);
       taskRef.once("value", (snapshot) => {
         const taskData = snapshot.val();
         if (taskData && taskData.userUID === loggedUser.value) {
@@ -103,7 +104,7 @@ export default {
 
     onUnmounted(() => {
       if (tasksRefListener) {
-        firebase.database().ref("tasks").off("value", tasksRefListener);
+        Database().ref("tasks").off("value", tasksRefListener);
       }
       unsubscribeAuth();
     });

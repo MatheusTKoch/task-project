@@ -6,7 +6,8 @@ import store from "./src/index.js";
 import App from "./src/App.vue";
 import contentBox from "./src/components/UI/ContentBox.vue";
 import BaseButton from "./src/components/UI/BaseButton.vue";
-import firebase from "firebase";
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "@firebase/database";
 import './src/index.css'; 
 
 const firebaseConfig = {
@@ -20,8 +21,8 @@ const firebaseConfig = {
 
 const app = createApp(App);
 
-firebase.initializeApp(firebaseConfig);
-firebase.database();
+initializeApp(firebaseConfig);
+getDatabase(firebaseConfig)
 
 app.component("content-box", contentBox);
 app.component("base-button", BaseButton);

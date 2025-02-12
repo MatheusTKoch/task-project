@@ -1,8 +1,8 @@
-import firebase from "firebase";
+import { Database } from "@firebase/database";
 
 export default {
   async refreshTasks(context) {
-    const tasksRef = firebase.database().ref("tasks");
+    const tasksRef = Database().ref("tasks");
     tasksRef.on("value", (data) => {
       const dataValue = data.val();
       context.commit("setTasks", dataValue);
@@ -13,7 +13,7 @@ export default {
     if (taskText === '') {
       return;
     } else {
-      const postTaskRef = firebase.database().ref("tasks");
+      const postTaskRef = Database().ref("tasks");
       const newTaskRef = postTaskRef.push();
       const currentUser = firebase.auth().currentUser.uid;
        newTaskRef.set({
@@ -24,8 +24,8 @@ export default {
   },
   async deleteTask(context, data) {
     const dataText = data.toString();
-    const ref = firebase.database().ref("/tasks/").on('value', function(snapshot) {
-      const removeRef = firebase.database().ref("/tasks/" + dataText)
+    const ref = Database().ref("/tasks/").on('value', function(snapshot) {
+      const removeRef = Database().ref("/tasks/" + dataText)
       removeRef.remove().then(function() {
         console.log("Remove succeeded.")
       })
