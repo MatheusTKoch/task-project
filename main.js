@@ -16,13 +16,14 @@ const firebaseConfig = {
   projectId: "taskproject-caf25",
   storageBucket: "taskproject-caf25.firebasestorage.app",
   messagingSenderId: "1061401138693",
-  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c"
+  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c",
+  databaseURL: 'https://taskproject-caf25-default-rtdb.firebaseio.com/'
   };
 
 const app = createApp(App);
 
-initializeApp(firebaseConfig);
-getDatabase(firebaseConfig)
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp)
 
 app.component("content-box", contentBox);
 app.component("base-button", BaseButton);

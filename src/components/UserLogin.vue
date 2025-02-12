@@ -3,7 +3,7 @@ import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { AuthCredential } from "firebase/auth";
+import {  signInWithEmailAndPassword, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import BaseHeader from "./UI/BaseHeader.vue";
 import { Icon } from "@iconify/vue";
 import { Menu, MenuButton, MenuItems, MenuItem, Switch } from "@headlessui/vue";
@@ -26,6 +26,7 @@ export default {
     const errMsg = ref();
     const isDark = useDark();
     const toggleDark = useToggle(isDark);
+    const auth = getAuth();
 
     function signupOrLogin(emitInfo) {
       const username = ref(emitInfo[0]);
@@ -36,8 +37,7 @@ export default {
       
       
       if (buttonText.value === "Login") {
-        AuthCredential()
-          .signInWithEmailAndPassword(username.value, password.value)
+        signInWithEmailAndPassword(auth ,username.value, password.value)
           .then(() => {
             router.replace("/tasks");
           })
@@ -58,8 +58,7 @@ export default {
             }
           });
       } else if (buttonText.value === "Signup") {
-        AuthCredential
-          .createUserWithEmailAndPassword(username.value, password.value)
+        createUserWithEmailAndPassword(auth, username.value, password.value)
           .then(() => {
             alert("User created with success!");
           })

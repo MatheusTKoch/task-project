@@ -24,9 +24,9 @@
 <script>
 import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
-import { Database } from "firebase/database";
-import { AuthCredential } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { Icon } from "@iconify/vue";
+import { getDatabase } from "@firebase/database";
 
 export default {
   name: "TaskList",
@@ -40,7 +40,7 @@ export default {
     const newTaskText = ref("");
     const loggedUser = ref(null);
     let tasksRefListener = null;
-    const unsubscribeAuth = AuthCredential().onAuthStateChanged((user) => {
+    const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
       if (user) {
         loggedUser.value = user.uid;
         fetchUserTasks();
@@ -48,7 +48,7 @@ export default {
         loggedUser.value = null;
         taskArray.value = {};
         if (tasksRefListener) {
-          Database().ref("tasks").off("value", tasksRefListener);
+          getDatabase().ref("tasks").off("value", tasksRefListener);
           tasksRefListener = null;
         }
       }
@@ -56,7 +56,7 @@ export default {
 
     function fetchUserTasks() {
       isLoading.value = true;
-      const tasksRef = Database().ref("tasks");
+      const tasksRef = getDatabase().ref("tasks");
       if (tasksRefListener) {
         tasksRef.off("value", tasksRefListener);
       }
@@ -71,7 +71,7 @@ export default {
 
     function addTask() {
       if (!loggedUser.value || !newTaskText.value.trim()) return;
-      const tasksRef = Database().ref("tasks");
+      const tasksRef = getDatabase().ref("tasks");
       tasksRef
         .push({
           taskText: newTaskText.value,
@@ -86,7 +86,7 @@ export default {
     }
 
     function deleteTask(taskKey) {
-      const taskRef = Database().ref("tasks").child(taskKey);
+      const taskRef = getDatabase().ref("tasks").child(taskKey);
       taskRef.once("value", (snapshot) => {
         const taskData = snapshot.val();
         if (taskData && taskData.userUID === loggedUser.value) {
@@ -104,7 +104,7 @@ export default {
 
     onUnmounted(() => {
       if (tasksRefListener) {
-        Database().ref("tasks").off("value", tasksRefListener);
+        getDatabase().ref("tasks").off("value", tasksRefListener);
       }
       unsubscribeAuth();
     });
