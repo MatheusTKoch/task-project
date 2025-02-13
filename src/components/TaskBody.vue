@@ -40,6 +40,8 @@ export default {
     const newTaskText = ref("");
     const loggedUser = ref(null);
     let tasksRefListener = null;
+    const db = getDatabase();
+
     const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
       if (user) {
         loggedUser.value = user.uid;
@@ -48,7 +50,7 @@ export default {
         loggedUser.value = null;
         taskArray.value = {};
         if (tasksRefListener) {
-          getDatabase().ref("tasks").off("value", tasksRefListener);
+          db.ref("tasks").off("value", tasksRefListener);
           tasksRefListener = null;
         }
       }
@@ -56,7 +58,7 @@ export default {
 
     function fetchUserTasks() {
       isLoading.value = true;
-      const tasksRef = getDatabase().ref("tasks");
+      const tasksRef = db.ref("tasks");
       if (tasksRefListener) {
         tasksRef.off("value", tasksRefListener);
       }
@@ -71,7 +73,7 @@ export default {
 
     function addTask() {
       if (!loggedUser.value || !newTaskText.value.trim()) return;
-      const tasksRef = getDatabase().ref("tasks");
+      const tasksRef = db.ref("tasks");
       tasksRef
         .push({
           taskText: newTaskText.value,
@@ -86,7 +88,7 @@ export default {
     }
 
     function deleteTask(taskKey) {
-      const taskRef = getDatabase().ref("tasks").child(taskKey);
+      const taskRef = db.ref("tasks").child(taskKey);
       taskRef.once("value", (snapshot) => {
         const taskData = snapshot.val();
         if (taskData && taskData.userUID === loggedUser.value) {
@@ -104,7 +106,7 @@ export default {
 
     onUnmounted(() => {
       if (tasksRefListener) {
-        getDatabase().ref("tasks").off("value", tasksRefListener);
+        db.ref("tasks").off("value", tasksRefListener);
       }
       unsubscribeAuth();
     });
