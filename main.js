@@ -18,12 +18,12 @@ const firebaseConfig = {
   messagingSenderId: "1061401138693",
   appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c",
   databaseURL: 'https://taskproject-caf25-default-rtdb.firebaseio.com/'
-  };
+};
 
 const app = createApp(App);
 
 initializeApp(firebaseConfig);
-getDatabase(firebaseConfig, 'https://taskproject-caf25-default-rtdb.firebaseio.com/')
+getDatabase()
 
 app.component("content-box", contentBox);
 app.component("base-button", BaseButton);

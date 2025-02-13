@@ -1,4 +1,17 @@
+import { initializeApp } from "firebase/app";
 import { getDatabase } from "@firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6rOiOiFAkse6Y3_hdzvP-Z1zRv20wrJg",
+  authDomain: "taskproject-caf25.firebaseapp.com",
+  projectId: "taskproject-caf25",
+  storageBucket: "taskproject-caf25.firebasestorage.app",
+  messagingSenderId: "1061401138693",
+  appId: "1:1061401138693:web:03fc3339b03b4cb79eee6c",
+  databaseURL: 'https://taskproject-caf25-default-rtdb.firebaseio.com/'
+};
+
+initializeApp(firebaseConfig);
 const db = getDatabase();
 
 export default {

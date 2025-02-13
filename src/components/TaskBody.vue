@@ -26,7 +26,7 @@ import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth } from "firebase/auth";
 import { Icon } from "@iconify/vue";
-import { getDatabase } from "@firebase/database";
+import { getDatabase, ref as refFirebase } from "@firebase/database";
 
 export default {
   name: "TaskList",
@@ -39,8 +39,8 @@ export default {
     const isLoading = ref(false);
     const newTaskText = ref("");
     const loggedUser = ref(null);
-    let tasksRefListener = null;
     const db = getDatabase();
+    let tasksRefListener = null;
 
     const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
       if (user) {
@@ -50,7 +50,7 @@ export default {
         loggedUser.value = null;
         taskArray.value = {};
         if (tasksRefListener) {
-          db.ref("tasks").off("value", tasksRefListener);
+          refFirebase(db, "tasks").off("value", tasksRefListener);
           tasksRefListener = null;
         }
       }
@@ -58,11 +58,11 @@ export default {
 
     function fetchUserTasks() {
       isLoading.value = true;
-      const tasksRef = db.ref("tasks");
       if (tasksRefListener) {
-        tasksRef.off("value", tasksRefListener);
+        refFirebase("tasks").off("value", tasksRefListener);
       }
-      tasksRefListener = tasksRef
+      tasksRefListener = 
+      refFirebase(db, "tasks")
         .orderByChild("userUID")
         .equalTo(loggedUser.value)
         .on("value", (snapshot) => {
@@ -73,8 +73,7 @@ export default {
 
     function addTask() {
       if (!loggedUser.value || !newTaskText.value.trim()) return;
-      const tasksRef = db.ref("tasks");
-      tasksRef
+      refFirebase(db, "tasks")
         .push({
           taskText: newTaskText.value,
           userUID: loggedUser.value,
@@ -88,11 +87,10 @@ export default {
     }
 
     function deleteTask(taskKey) {
-      const taskRef = db.ref("tasks").child(taskKey);
-      taskRef.once("value", (snapshot) => {
+      refFirebase(db, "tasks").child(taskKey).once("value", (snapshot) => {
         const taskData = snapshot.val();
         if (taskData && taskData.userUID === loggedUser.value) {
-          taskRef
+          refFirebase(db, "tasks").child(taskKey)
             .remove()
             .then(() => console.log("Task removed!"))
             .catch((error) =>
@@ -106,7 +104,7 @@ export default {
 
     onUnmounted(() => {
       if (tasksRefListener) {
-        db.ref("tasks").off("value", tasksRefListener);
+        refFirebase("tasks").off("value", tasksRefListener);
       }
       unsubscribeAuth();
     });
