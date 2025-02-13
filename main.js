@@ -22,8 +22,8 @@ const firebaseConfig = {
 
 const app = createApp(App);
 
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp)
+initializeApp(firebaseConfig);
+getDatabase(firebaseConfig, 'https://taskproject-caf25-default-rtdb.firebaseio.com/')
 
 app.component("content-box", contentBox);
 app.component("base-button", BaseButton);
