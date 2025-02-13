@@ -26,7 +26,7 @@ import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth } from "firebase/auth";
 import { Icon } from "@iconify/vue";
-import { getDatabase, ref as refFirebase } from "@firebase/database";
+import { getDatabase, query, ref as refFirebase, orderByChild, equalTo, onValue } from "@firebase/database";
 
 export default {
   name: "TaskList",
@@ -61,14 +61,14 @@ export default {
       if (tasksRefListener) {
         refFirebase("tasks").off("value", tasksRefListener);
       }
-      tasksRefListener = 
-      refFirebase(db, "tasks")
-        .orderByChild("userUID")
-        .equalTo(loggedUser.value)
-        .on("value", (snapshot) => {
+      tasksRefListener = query(
+        refFirebase(db, "tasks"),
+        orderByChild("userUID"),
+        equalTo(loggedUser.value))
+        onValue("value", (snapshot) => {
           taskArray.value = snapshot.val() || {};
           isLoading.value = false;
-        });
+        })   
     }
 
     function addTask() {
