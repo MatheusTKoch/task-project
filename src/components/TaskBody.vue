@@ -110,7 +110,7 @@ export default {
 
     onUnmounted(() => {
       if (tasksRefListener) {
-        refFirebase("tasks").off("value", tasksRefListener);
+        tasksRefListener();
       }
       unsubscribeAuth();
     });
