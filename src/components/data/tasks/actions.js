@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "@firebase/database";
+import { getDatabase, ref, onValue, push, set, remove } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6rOiOiFAkse6Y3_hdzvP-Z1zRv20wrJg",
@@ -16,37 +17,41 @@ const db = getDatabase();
 
 export default {
   async refreshTasks(context) {
-    const tasksRef = db.ref("tasks");
-    tasksRef.on("value", (data) => {
-      const dataValue = data.val();
+    const tasksRef = ref(db, "tasks");
+    onValue(tasksRef, (snapshot) => {
+      const dataValue = snapshot.val();
       context.commit("setTasks", dataValue);
     });
   },
+
   async submitData(context, data) {
     const taskText = data.toString();
     if (taskText === '') {
       return;
     } else {
-      const postTaskRef = db.ref("tasks");
-      const newTaskRef = postTaskRef.push();
-      const currentUser = firebase.auth().currentUser.uid;
-       newTaskRef.set({
+      const tasksRef = ref(db, "tasks");
+      const newTaskRef = push(tasksRef);
+      const currentUser = getAuth().currentUser;
+      if (!currentUser) {
+        console.error("Usuário não autenticado");
+        return;
+      }
+      await set(newTaskRef, {
         taskText: taskText,
-        userUID: currentUser,
+        userUID: currentUser.uid,
       });
-    } 
+    }
   },
+
   async deleteTask(context, data) {
     const dataText = data.toString();
-    const ref = db.ref("/tasks/").on('value', function(snapshot) {
-      const removeRef = db.ref("/tasks/" + dataText)
-      removeRef.remove().then(function() {
-        console.log("Remove succeeded.")
+    const taskRef = ref(db, "tasks/" + dataText);
+    remove(taskRef)
+      .then(() => {
+        console.log("Remove succeeded.");
       })
-      .catch(function(error) {
-        console.log("Remove failed: " + error.message)
+      .catch((error) => {
+        console.error("Remove failed: " + error.message);
       });
-    })
-    
-  },
+  }
 };

@@ -26,7 +26,7 @@ import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth } from "firebase/auth";
 import { Icon } from "@iconify/vue";
-import { getDatabase, query, ref as refFirebase, orderByChild, equalTo, onValue } from "@firebase/database";
+import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove} from "@firebase/database";
 
 export default {
   name: "TaskList",
@@ -59,16 +59,17 @@ export default {
     function fetchUserTasks() {
       isLoading.value = true;
       if (tasksRefListener) {
-        refFirebase("tasks").off("value", tasksRefListener);
+        tasksRefListener();
       }
-      tasksRefListener = query(
+      const tasksQuery = query(
         refFirebase(db, "tasks"),
         orderByChild("userUID"),
-        equalTo(loggedUser.value))
-        onValue("value", (snapshot) => {
-          taskArray.value = snapshot.val() || {};
-          isLoading.value = false;
-        })   
+        equalTo(loggedUser.value)
+      );
+      tasksRefListener = onValue(tasksQuery, (snapshot) => {
+        taskArray.value = snapshot.val() || {};
+        isLoading.value = false;
+      });
     }
 
     function addTask() {
@@ -87,19 +88,24 @@ export default {
     }
 
     function deleteTask(taskKey) {
-      refFirebase(db, "tasks").child(taskKey).once("value", (snapshot) => {
-        const taskData = snapshot.val();
-        if (taskData && taskData.userUID === loggedUser.value) {
-          refFirebase(db, "tasks").child(taskKey)
-            .remove()
-            .then(() => console.log("Task removed!"))
-            .catch((error) =>
-              console.error("Error removing task:", error)
-            );
-        } else {
-          console.error("Access denied: task doesn't belong to user.");
-        }
-      });
+      const tasksRef = refFirebase(db, "tasks");
+      const taskRef = child(tasksRef, taskKey);
+      get(taskRef)
+        .then((snapshot) => {
+          const taskData = snapshot.val();
+          if (taskData && taskData.userUID === loggedUser.value) {
+            remove(taskRef)
+              .then(() => console.log("Task removed!"))
+              .catch((error) =>
+                console.error("Error removing task:", error)
+              );
+          } else {
+            console.error("Access denied: task doesn't belong to user.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching task data:", error);
+        });
     }
 
     onUnmounted(() => {
