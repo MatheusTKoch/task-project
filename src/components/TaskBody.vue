@@ -1,6 +1,36 @@
 <template>
   <div class="dark:bg-gray-900 min-h-screen p-4">
-    <main-header></main-header>
+    <main-header>
+      <div class="flex justify-between items-center w-full px-4">
+        <div class="py-0 px-3 font-semibold dark:text-white">Task Project</div>
+        <div class="flex items-center gap-2">
+          <Icon icon="iconamoon:mode-light" :color="isDark ? 'white' : 'black'" width="26" height="26" />
+          <Switch
+            @click="toggleDark()"
+            v-model="isDark"
+            :class="isDark ? 'bg-gray-900' : 'bg-gray-700'"
+            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          >
+            <span
+              :class="isDark ? 'translate-x-6' : 'translate-x-1'"
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+            />
+          </Switch>
+          <Icon 
+            icon="material-symbols:dark-mode-outline" 
+            :color="isDark ? 'white' : 'black'" 
+            width="26" 
+            height="26" 
+          />
+          <button 
+            @click="logout" 
+            class="ml-4 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </main-header>
     <div v-if="isLoading" class="flex justify-center items-center h-32">
       <div class="spinner"></div>
     </div>
@@ -24,17 +54,35 @@
 <script>
 import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { Icon } from "@iconify/vue";
-import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove} from "@firebase/database";
+import { Switch } from "@headlessui/vue";
+import { useToggle, useDark } from "@vueuse/core";
+import { useRouter } from "vue-router";
+import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove } from "@firebase/database";
 
 export default {
   name: "TaskList",
   components: {
     MainHeader,
     Icon,
+    Switch,
   },
   setup() {
+    const router = useRouter();
+    const auth = getAuth();
+    const isDark = useDark();
+    const toggleDark = useToggle(isDark);
+
+    const logout = async () => {
+      try {
+        await signOut(auth);
+        router.push("/");
+      } catch (error) {
+        console.error("Error logging out:", error);
+      }
+    };
+
     const taskArray = ref({});
     const isLoading = ref(false);
     const newTaskText = ref("");
@@ -42,7 +90,7 @@ export default {
     const db = getDatabase();
     let tasksRefListener = null;
 
-    const unsubscribeAuth = getAuth().onAuthStateChanged((user) => {
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
         loggedUser.value = user.uid;
         fetchUserTasks();
@@ -121,6 +169,9 @@ export default {
       newTaskText,
       addTask,
       deleteTask,
+      isDark,
+      toggleDark,
+      logout,
     };
   },
 };
