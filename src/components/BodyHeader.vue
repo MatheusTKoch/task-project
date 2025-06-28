@@ -3,8 +3,8 @@
     <base-header>
       <slot></slot>
     </base-header>
-    <p class="text-3xl font-semibold p-3 dark:text-white">My Tasks</p>
-    <div class="text-2xl font-normal pb-5 dark:text-white">Add a task below (with Enter) and click over the finished tasks</div>
+    <p class="text-3xl font-semibold p-3 dark:text-white">Minhas Tarefas</p>
+    <div class="text-2xl font-normal pb-5 dark:text-white">Adicione uma tarefa abaixo (apertando Enter) e marque as tarefas finalizadas</div>
     <div class="my-4">
       <input
         placeholder="Add a new task!"

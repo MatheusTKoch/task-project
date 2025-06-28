@@ -36,7 +36,7 @@ export default {
       errMsg.value = "";
       
       
-      if (buttonText.value === "Login") {
+      if (buttonText.value === "Entrar") {
         signInWithEmailAndPassword(auth ,username.value, password.value)
           .then(() => {
             router.replace("/tasks");
@@ -57,10 +57,10 @@ export default {
                 break;
             }
           });
-      } else if (buttonText.value === "Signup") {
+      } else if (buttonText.value === "Inscrever-se") {
         createUserWithEmailAndPassword(auth, username.value, password.value)
           .then(() => {
-            alert("User created with success!");
+            alert("Usuario Criado com sucesso!");
           })
           .catch((error) => {
             console.log(error.code);
@@ -99,9 +99,9 @@ export default {
      </div>
   </base-header>
   <content-box>
-    <h1 class="font-semibold text-3xl p-4 dark:text-white">The Task Project</h1>
+    <h1 class="font-semibold text-3xl p-4 dark:text-white">Task Project</h1>
     <h3 class="font-medium text-2xl p-2 dark:text-white">
-      Please login or signup to start your task list!
+      Faça login ou crie uma conta para começar a acompanhar suas tarefas!
     </h3>
     <login-component @emit-user="signupOrLogin"></login-component>
     <error-message v-if="errMsg">{{ errMsg }}</error-message>
