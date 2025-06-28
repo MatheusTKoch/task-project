@@ -2,6 +2,7 @@
 import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
 import ContentBox from "./UI/ContentBox.vue";
+import BaseModal from "./UI/BaseModal.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import {  signInWithEmailAndPassword, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -15,6 +16,7 @@ const errMsg = ref();
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const auth = getAuth();
+const showSuccessModal = ref(false);
 
 function signupOrLogin(emitInfo) {
   const username = ref(emitInfo[0]);
@@ -49,15 +51,33 @@ function signupOrLogin(emitInfo) {
   } else if (buttonText.value === "Signup") {
     createUserWithEmailAndPassword(auth, username.value, password.value)
       .then(() => {
-        alert("Usuario Criado com sucesso!");
+        showSuccessModal.value = true;
       })
       .catch((error) => {
         console.log(error.code);
-        alert(error.message);
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            errMsg.value = "Este email já está sendo usado";
+            break;
+          case "auth/weak-password":
+            errMsg.value = "A senha deve ter pelo menos 6 caracteres";
+            break;
+          case "auth/invalid-email":
+            errMsg.value = "Email inválido";
+            break;
+          default:
+            errMsg.value = "Erro ao criar conta: " + error.message;
+            break;
+        }
       });
   } else {
     console.log("Unknown button text:", buttonText.value);
   }
+}
+
+function handleSuccessModalConfirm() {
+  showSuccessModal.value = false;
+  router.push("/tasks");
 }
 </script>
 
@@ -88,4 +108,13 @@ function signupOrLogin(emitInfo) {
     <login-component @emit-user="signupOrLogin"></login-component>
     <error-message v-if="errMsg">{{ errMsg }}</error-message>
   </content-box>
+
+  <!-- Modal de Sucesso -->
+  <base-modal 
+    v-model="showSuccessModal"
+    title="Conta Criada com Sucesso!"
+    message="Sua conta foi criada com sucesso! Você será redirecionado para a página de tarefas."
+    confirm-text="Continuar"
+    @confirm="handleSuccessModalConfirm"
+  />
 </template>

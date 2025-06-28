@@ -42,6 +42,16 @@
         buttonSecondary
       }}</base-button>
     </span>
+    
+    <!-- Link para esqueci a senha - só aparece quando está no modo Login -->
+    <div v-if="buttonPrimary === 'Login'" class="mt-4">
+      <router-link 
+        to="/forgot-password" 
+        class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+      >
+        Esqueci minha senha
+      </router-link>
+    </div>
   </form>
 </template>
 

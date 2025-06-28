@@ -48,11 +48,24 @@
         </li>
       </ul>
     </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <base-modal 
+      v-model="showDeleteModal"
+      title="Confirmar Exclusão"
+      message="Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser desfeita."
+      confirm-text="Excluir"
+      cancel-text="Cancelar"
+      :show-cancel="true"
+      @confirm="confirmDeleteTask"
+      @cancel="cancelDeleteTask"
+    />
   </div>
 </template>
 
 <script setup>
 import MainHeader from "./BodyHeader.vue";
+import BaseModal from "./UI/BaseModal.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import { Icon } from "@iconify/vue";
@@ -81,6 +94,8 @@ const newTaskText = ref("");
 const loggedUser = ref(null);
 const db = getDatabase();
 let tasksRefListener = null;
+const showDeleteModal = ref(false);
+const taskToDelete = ref(null);
 
 const unsubscribeAuth = auth.onAuthStateChanged((user) => {
   if (user) {
@@ -129,14 +144,24 @@ function addTask() {
 }
 
 function deleteTask(taskKey) {
+  taskToDelete.value = taskKey;
+  showDeleteModal.value = true;
+}
+
+function confirmDeleteTask() {
+  if (!taskToDelete.value) return;
+  
   const tasksRef = refFirebase(db, "tasks");
-  const taskRef = child(tasksRef, taskKey);
+  const taskRef = child(tasksRef, taskToDelete.value);
   get(taskRef)
     .then((snapshot) => {
       const taskData = snapshot.val();
       if (taskData && taskData.userUID === loggedUser.value) {
         remove(taskRef)
-          .then(() => console.log("Task removed!"))
+          .then(() => {
+            console.log("Task removed!");
+            taskToDelete.value = null;
+          })
           .catch((error) =>
             console.error("Error removing task:", error)
           );
@@ -147,6 +172,10 @@ function deleteTask(taskKey) {
     .catch((error) => {
       console.error("Error fetching task data:", error);
     });
+}
+
+function cancelDeleteTask() {
+  taskToDelete.value = null;
 }
 
 onUnmounted(() => {
