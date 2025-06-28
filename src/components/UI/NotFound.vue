@@ -15,14 +15,7 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import ContentBox from "./ContentBox.vue";
 import BaseHeader from "./BaseHeader.vue";
-
-export default {
-  components: {
-    ContentBox,
-    BaseHeader
-  },
-};
 </script>

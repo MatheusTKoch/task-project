@@ -23,51 +23,38 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import { onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { getAuth } from "firebase/auth";
 import BaseHeader from "./UI/BaseHeader.vue"
 
-export default {
-  components: {
-    BaseHeader
-  },
-  setup() {
-    const taskText = ref('');
-    const store = useStore();
-    const router = useRouter();
+const taskText = ref('');
+const store = useStore();
+const router = useRouter();
 
-    function submitTask() {
-      store.dispatch("submitData", taskText.value);
-        taskText.value = '';
+function submitTask() {
+  store.dispatch("submitData", taskText.value);
+    taskText.value = '';
+}
+
+function logoutUser() {
+  getAuth().signOut();
+  router.replace("/login");
+}
+
+function checkUserLogged() {
+  const userLogged = getAuth().onAuthStateChanged(function (logged) {
+    if (!logged) {
+      router.replace("/");
     }
+  });
+}
 
-    function logoutUser() {
-      getAuth().signOut();
-      router.replace("/login");
-    }
-
-    function checkUserLogged() {
-      const userLogged = getAuth().onAuthStateChanged(function (logged) {
-        if (!logged) {
-          router.replace("/");
-        }
-      });
-    }
-
-    onBeforeUnmount(() => {
-      checkUserLogged();
-    });
-
-    return {
-      taskText,
-      submitTask,
-      logoutUser,
-    };
-  },
-};
+onBeforeUnmount(() => {
+  checkUserLogged();
+});
 </script>
 
 <style scoped>

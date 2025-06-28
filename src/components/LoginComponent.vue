@@ -45,59 +45,44 @@
   </form>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import { Icon } from "@iconify/vue";
+import BaseButton from "./UI/BaseButton.vue";
 
-export default {
-  components: {
-    Icon
-  },
-  setup(props, context) {
-    const buttonPrimary = ref("Entrar");
-    const buttonSecondary = ref("Inscrever-se");
-    const username = ref("");
-    const password = ref("");
-    const showHide = ref(false);
+const emit = defineEmits(['emit-user']);
 
-    function switchText() {
-      if (buttonPrimary.value === "Entrar") {
-        buttonPrimary.value = "Inscrever-se";
-        buttonSecondary.value = "Entrar";
-      } else {
-        buttonPrimary.value = "Entrar";
-        buttonSecondary.value = "Inscrever-se";
-      }
-    }
+const buttonPrimary = ref("Login");
+const buttonSecondary = ref("Signup");
+const username = ref("");
+const password = ref("");
+const showHide = ref(false);
 
-    function emitUser() {
-      context.emit("emit-user", [
-        username.value,
-        password.value,
-        buttonPrimary.value,
-      ]);
-      username.value = "";
-      password.value = "";
-    }
+function switchText() {
+  if (buttonPrimary.value === "Login") {
+    buttonPrimary.value = "Signup";
+    buttonSecondary.value = "Login";
+  } else {
+    buttonPrimary.value = "Login";
+    buttonSecondary.value = "Signup";
+  }
+}
 
-    function showHidePassword() {
-      if (showHide.value === false) {
-        showHide.value = true;
-      } else if (showHide.value === true) {
-        showHide.value = false;
-      }
-    }
+function emitUser() {
+  emit("emit-user", [
+    username.value,
+    password.value,
+    buttonPrimary.value,
+  ]);
+  username.value = "";
+  password.value = "";
+}
 
-    return {
-      buttonPrimary,
-      buttonSecondary,
-      switchText,
-      emitUser,
-      username,
-      password,
-      showHide,
-      showHidePassword
-    };
-  },
-};
+function showHidePassword() {
+  if (showHide.value === false) {
+    showHide.value = true;
+  } else if (showHide.value === true) {
+    showHide.value = false;
+  }
+}
 </script>

@@ -1,6 +1,7 @@
-<script>
+<script setup>
 import LoginComponent from "./LoginComponent.vue";
 import ErrorMessage from "./UI/ErrorMessage.vue";
+import ContentBox from "./UI/ContentBox.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import {  signInWithEmailAndPassword, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -9,74 +10,55 @@ import { Icon } from "@iconify/vue";
 import { Menu, MenuButton, MenuItems, MenuItem, Switch } from "@headlessui/vue";
 import { useToggle, useDark } from "@vueuse/core"; 
 
-export default {
-  components: {
-    LoginComponent,
-    ErrorMessage,
-    BaseHeader,
-    Icon,
-    Menu,
-    MenuButton,
-    MenuItems,
-    MenuItem,
-    Switch
-  },
-  setup() {
-    const router = useRouter();
-    const errMsg = ref();
-    const isDark = useDark();
-    const toggleDark = useToggle(isDark);
-    const auth = getAuth();
+const router = useRouter();
+const errMsg = ref();
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+const auth = getAuth();
 
-    function signupOrLogin(emitInfo) {
-      const username = ref(emitInfo[0]);
-      const password = ref(emitInfo[1]);
-      const buttonText = ref(emitInfo[2]);
+function signupOrLogin(emitInfo) {
+  const username = ref(emitInfo[0]);
+  const password = ref(emitInfo[1]);
+  const buttonText = ref(emitInfo[2]);
 
-      errMsg.value = "";
-      
-      
-      if (buttonText.value === "Entrar") {
-        signInWithEmailAndPassword(auth ,username.value, password.value)
-          .then(() => {
-            router.replace("/tasks");
-          })
-          .catch((error) => {
-            switch (error.code) {
-              case "auth/invalid-email":
-                errMsg.value = "Invalid email";
-                break;
-              case "auth/user-not-found":
-                errMsg.value = "No account with that email was found";
-                break;
-              case "auth/wrong-password":
-                errMsg.value = "Incorrect password";
-                break;
-              default:
-                errMsg.value = "Email or password was incorrect";
-                break;
-            }
-          });
-      } else if (buttonText.value === "Inscrever-se") {
-        createUserWithEmailAndPassword(auth, username.value, password.value)
-          .then(() => {
-            alert("Usuario Criado com sucesso!");
-          })
-          .catch((error) => {
-            console.log(error.code);
-            alert(error.message);
-          });
-      }
-    }
-
-    return {
-      signupOrLogin,
-      errMsg,
-      isDark,
-      toggleDark
-    };
-  },
-};
+  errMsg.value = "";
+  
+  
+  if (buttonText.value === "Login") {
+    signInWithEmailAndPassword(auth ,username.value, password.value)
+      .then(() => {
+        router.replace("/tasks");
+      })
+      .catch((error) => {
+        console.log("Login error:", error);
+        switch (error.code) {
+          case "auth/invalid-email":
+            errMsg.value = "Invalid email";
+            break;
+          case "auth/user-not-found":
+            errMsg.value = "No account with that email was found";
+            break;
+          case "auth/wrong-password":
+            errMsg.value = "Incorrect password";
+            break;
+          default:
+            errMsg.value = "Email or password was incorrect";
+            break;
+        }
+      });
+  } else if (buttonText.value === "Signup") {
+    createUserWithEmailAndPassword(auth, username.value, password.value)
+      .then(() => {
+        alert("Usuario Criado com sucesso!");
+      })
+      .catch((error) => {
+        console.log(error.code);
+        alert(error.message);
+      });
+  } else {
+    console.log("Unknown button text:", buttonText.value);
+  }
+}
 </script>
 
 <template>

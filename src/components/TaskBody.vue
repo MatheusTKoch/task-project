@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import MainHeader from "./BodyHeader.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth, signOut } from "firebase/auth";
@@ -59,122 +59,102 @@ import { Icon } from "@iconify/vue";
 import { Switch } from "@headlessui/vue";
 import { useToggle, useDark } from "@vueuse/core";
 import { useRouter } from "vue-router";
-import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove } from "@firebase/database";
+import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove, push } from "@firebase/database";
 
-export default {
-  name: "TaskList",
-  components: {
-    MainHeader,
-    Icon,
-    Switch,
-  },
-  setup() {
-    const router = useRouter();
-    const auth = getAuth();
-    const isDark = useDark();
-    const toggleDark = useToggle(isDark);
+const router = useRouter();
+const auth = getAuth();
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
-    const logout = async () => {
-      try {
-        await signOut(auth);
-        router.push("/");
-      } catch (error) {
-        console.error("Error logging out:", error);
-      }
-    };
-
-    const taskArray = ref({});
-    const isLoading = ref(false);
-    const newTaskText = ref("");
-    const loggedUser = ref(null);
-    const db = getDatabase();
-    let tasksRefListener = null;
-
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-      if (user) {
-        loggedUser.value = user.uid;
-        fetchUserTasks();
-      } else {
-        loggedUser.value = null;
-        taskArray.value = {};
-        if (tasksRefListener) {
-          refFirebase(db, "tasks").off("value", tasksRefListener);
-          tasksRefListener = null;
-        }
-      }
-    });
-
-    function fetchUserTasks() {
-      isLoading.value = true;
-      if (tasksRefListener) {
-        tasksRefListener();
-      }
-      const tasksQuery = query(
-        refFirebase(db, "tasks"),
-        orderByChild("userUID"),
-        equalTo(loggedUser.value)
-      );
-      tasksRefListener = onValue(tasksQuery, (snapshot) => {
-        taskArray.value = snapshot.val() || {};
-        isLoading.value = false;
-      });
-    }
-
-    function addTask() {
-      if (!loggedUser.value || !newTaskText.value.trim()) return;
-      refFirebase(db, "tasks")
-        .push({
-          taskText: newTaskText.value,
-          userUID: loggedUser.value,
-        })
-        .then(() => {
-          newTaskText.value = "";
-        })
-        .catch((error) => {
-          console.error("Error adding task:", error);
-        });
-    }
-
-    function deleteTask(taskKey) {
-      const tasksRef = refFirebase(db, "tasks");
-      const taskRef = child(tasksRef, taskKey);
-      get(taskRef)
-        .then((snapshot) => {
-          const taskData = snapshot.val();
-          if (taskData && taskData.userUID === loggedUser.value) {
-            remove(taskRef)
-              .then(() => console.log("Task removed!"))
-              .catch((error) =>
-                console.error("Error removing task:", error)
-              );
-          } else {
-            console.error("Access denied: task doesn't belong to user.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching task data:", error);
-        });
-    }
-
-    onUnmounted(() => {
-      if (tasksRefListener) {
-        tasksRefListener();
-      }
-      unsubscribeAuth();
-    });
-
-    return {
-      taskArray,
-      isLoading,
-      newTaskText,
-      addTask,
-      deleteTask,
-      isDark,
-      toggleDark,
-      logout,
-    };
-  },
+const logout = async () => {
+  try {
+    await signOut(auth);
+    router.push("/");
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
 };
+
+const taskArray = ref({});
+const isLoading = ref(false);
+const newTaskText = ref("");
+const loggedUser = ref(null);
+const db = getDatabase();
+let tasksRefListener = null;
+
+const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+  if (user) {
+    loggedUser.value = user.uid;
+    fetchUserTasks();
+  } else {
+    loggedUser.value = null;
+    taskArray.value = {};
+    if (tasksRefListener) {
+      tasksRefListener();
+      tasksRefListener = null;
+    }
+  }
+});
+
+function fetchUserTasks() {
+  isLoading.value = true;
+  if (tasksRefListener) {
+    tasksRefListener();
+  }
+  const tasksQuery = query(
+    refFirebase(db, "tasks"),
+    orderByChild("userUID"),
+    equalTo(loggedUser.value)
+  );
+  tasksRefListener = onValue(tasksQuery, (snapshot) => {
+    taskArray.value = snapshot.val() || {};
+    isLoading.value = false;
+  });
+}
+
+function addTask() {
+  if (!loggedUser.value || !newTaskText.value.trim()) return;
+  
+  const tasksRef = refFirebase(db, "tasks");
+  push(tasksRef, {
+    taskText: newTaskText.value,
+    userUID: loggedUser.value,
+  })
+    .then(() => {
+      newTaskText.value = "";
+    })
+    .catch((error) => {
+      console.error("Error adding task:", error);
+    });
+}
+
+function deleteTask(taskKey) {
+  const tasksRef = refFirebase(db, "tasks");
+  const taskRef = child(tasksRef, taskKey);
+  get(taskRef)
+    .then((snapshot) => {
+      const taskData = snapshot.val();
+      if (taskData && taskData.userUID === loggedUser.value) {
+        remove(taskRef)
+          .then(() => console.log("Task removed!"))
+          .catch((error) =>
+            console.error("Error removing task:", error)
+          );
+      } else {
+        console.error("Access denied: task doesn't belong to user.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching task data:", error);
+    });
+}
+
+onUnmounted(() => {
+  if (tasksRefListener) {
+    tasksRefListener();
+  }
+  unsubscribeAuth();
+});
 </script>
 
 <style scoped>
