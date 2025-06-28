@@ -7,6 +7,7 @@
         id="email"
         placeholder="name@example.com"
         v-model="username"
+        @keydown.enter="handleLogin"
       />
       <label
         for="email"
@@ -21,6 +22,7 @@
         id="password"
         placeholder="Password"
         v-model="password"
+        @keydown.enter="handleLogin"
       />
       <div class="py-4">
       <input type="checkbox" id="showPassword" @change="showHidePassword"/>
@@ -32,19 +34,25 @@
         >Senha</label
       >
     </div>
-    <span class="p-0.5">
-      <base-button @click.prevent="emitUser" class="font-semibold">{{
-        buttonPrimary
-      }}</base-button>
-    </span>
-    <span class="p-0.5">
-      <base-button @click.prevent="switchText" class="font-semibold">{{
-        buttonSecondary
-      }}</base-button>
-    </span>
     
-    <!-- Link para esqueci a senha - só aparece quando está no modo Login -->
-    <div v-if="buttonPrimary === 'Login'" class="mt-4">
+    <div class="flex gap-4 justify-center mt-6">
+      <base-button 
+        @click.prevent="handleLogin" 
+        custom-class="bg-blue-500 hover:bg-blue-600 text-white border-blue-500 font-semibold disabled:opacity-50"
+        :disabled="!isFormValid"
+      >
+        Login
+      </base-button>
+      <base-button 
+        @click.prevent="handleSignup" 
+        custom-class="bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold disabled:opacity-50"
+        :disabled="!isFormValid"
+      >
+        Registrar-se
+      </base-button>
+    </div>
+    
+    <div class="mt-4">
       <router-link 
         to="/forgot-password" 
         class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
@@ -56,43 +64,48 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Icon } from "@iconify/vue";
 import BaseButton from "./UI/BaseButton.vue";
 
 const emit = defineEmits(['emit-user']);
 
-const buttonPrimary = ref("Login");
-const buttonSecondary = ref("Signup");
 const username = ref("");
 const password = ref("");
 const showHide = ref(false);
 
-function switchText() {
-  if (buttonPrimary.value === "Login") {
-    buttonPrimary.value = "Signup";
-    buttonSecondary.value = "Login";
-  } else {
-    buttonPrimary.value = "Login";
-    buttonSecondary.value = "Signup";
-  }
-}
+const isFormValid = computed(() => {
+  return username.value.trim().length > 0 && password.value.trim().length > 0;
+});
 
-function emitUser() {
+function handleLogin() {
+  if (!isFormValid.value) return;
+  
   emit("emit-user", [
     username.value,
     password.value,
-    buttonPrimary.value,
+    "Login",
   ]);
+  clearForm();
+}
+
+function handleSignup() {
+  if (!isFormValid.value) return;
+  
+  emit("emit-user", [
+    username.value,
+    password.value,
+    "Signup",
+  ]);
+  clearForm();
+}
+
+function clearForm() {
   username.value = "";
   password.value = "";
 }
 
 function showHidePassword() {
-  if (showHide.value === false) {
-    showHide.value = true;
-  } else if (showHide.value === true) {
-    showHide.value = false;
-  }
+  showHide.value = !showHide.value;
 }
 </script>
