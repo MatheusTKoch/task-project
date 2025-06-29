@@ -2,7 +2,9 @@
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-900 m-0 p-0 flex flex-col">
     <main-header>
       <div class="flex justify-between items-center w-full">
-        <div class="font-bold text-indigo-800 dark:text-indigo-200">Task Project</div>
+        <div class="font-bold text-indigo-800 dark:text-indigo-200 flex items-center gap-2">
+          📋 Task Project
+        </div>
         <div class="flex items-center gap-2">
           <Icon icon="iconamoon:mode-light" :color="isDark ? '#fbbf24' : '#f59e0b'" width="26" height="26" />
           <Switch
@@ -100,18 +102,32 @@
         <div class="spinner"></div>
       </div>
       <div v-else class="flex justify-center">
-        <ul class="task-list">
-        <li
-          v-for="(task, key) in taskArray"
-          :key="key"
-          class="task-item"
-        >
-          <span>{{ task.taskText }}</span>
-          <button @click="deleteTask(key)" class="delete-btn">
-            <Icon icon="mdi-light:delete" />
-          </button>
-        </li>
-      </ul>
+        <div class="task-list">
+          <task-item
+            v-for="(task, key) in taskArray"
+            :key="key"
+            :task="task"
+            @delete-task="deleteTask(key)"
+            @update-task="updateTask(key, $event)"
+          />
+          <div v-if="Object.keys(taskArray).length === 0" class="empty-state">
+            <div class="text-center py-12">
+              <Icon 
+                icon="mdi:clipboard-text-outline" 
+                :color="isDark ? '#a5b4fc' : '#6366f1'"
+                width="64" 
+                height="64"
+                class="mx-auto mb-4"
+              />
+              <h3 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-2">
+                Nenhuma tarefa encontrada
+              </h3>
+              <p class="text-indigo-600 dark:text-indigo-300">
+                Adicione uma nova tarefa usando o campo acima
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -228,13 +244,14 @@
 import MainHeader from "./BodyHeader.vue";
 import BaseModal from "./UI/BaseModal.vue";
 import AppFooter from "./UI/AppFooter.vue";
+import TaskItem from "./UI/TaskItem.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import { Icon } from "@iconify/vue";
 import { Switch, Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { useToggle, useDark } from "@vueuse/core";
 import { useRouter } from "vue-router";
-import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove, push } from "@firebase/database";
+import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove, push, set } from "@firebase/database";
 
 const router = useRouter();
 const auth = getAuth();
@@ -301,12 +318,50 @@ function addTask() {
   push(tasksRef, {
     taskText: newTaskText.value,
     userUID: loggedUser.value,
+    completed: false,
+    subtasks: []
   })
     .then(() => {
       newTaskText.value = "";
     })
     .catch((error) => {
       console.error("Error adding task:", error);
+    });
+}
+
+function updateTask(taskKey, updatedTask) {
+  if (!loggedUser.value) return;
+  
+  const tasksRef = refFirebase(db, "tasks");
+  const taskRef = child(tasksRef, taskKey);
+  
+  // Verifica se a tarefa pertence ao usuário
+  get(taskRef)
+    .then((snapshot) => {
+      const taskData = snapshot.val();
+      if (taskData && taskData.userUID === loggedUser.value) {
+        // Atualiza a tarefa mantendo o userUID
+        const taskToUpdate = {
+          ...updatedTask,
+          userUID: loggedUser.value
+        };
+        
+        // Remove a chave da tarefa para não causar conflito
+        delete taskToUpdate.key;
+        
+        set(taskRef, taskToUpdate)
+          .then(() => {
+            console.log("Task updated!");
+          })
+          .catch((error) => {
+            console.error("Error updating task:", error);
+          });
+      } else {
+        console.error("Access denied: task doesn't belong to user.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching task data:", error);
     });
 }
 
@@ -367,57 +422,23 @@ onUnmounted(() => {
 
 <style scoped>
 .task-list {
-  list-style-type: none;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
   padding: 0;
 }
 
-.task-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+.empty-state {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 2px dashed rgba(99, 102, 241, 0.3);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  margin: 2rem 0;
 }
 
-.dark .task-item {
+.dark .empty-state {
   background: rgba(51, 65, 85, 0.7);
   border-color: rgba(148, 163, 184, 0.3);
-  color: #e2e8f0;
-}
-
-.task-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
-}
-
-.dark .task-item:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
- 
-.delete-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #ef4444;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.delete-btn:hover {
-  background: rgba(239, 68, 68, 0.1);
-  transform: scale(1.1);
 }
 
 .spinner {

@@ -4,9 +4,11 @@
       <slot></slot>
     </base-header>
     <div class="max-w-4xl mx-auto px-4">
-      <p class="text-3xl font-bold py-6 text-indigo-800 dark:text-indigo-200 text-center">Minhas Tarefas</p>
+      <p class="text-3xl font-bold py-6 text-indigo-800 dark:text-indigo-200 text-center flex items-center justify-center gap-2">
+        📋 Minhas Tarefas
+      </p>
       <div class="text-lg font-normal pb-6 text-indigo-600 dark:text-indigo-300 text-center">
-        Adicione uma tarefa abaixo (apertando Enter) e organize suas atividades
+        Adicione uma tarefa abaixo (apertando Enter) e organize suas atividades com subtarefas
       </div>
       <div class="flex justify-center mb-8">
         <div class="flex gap-2 w-full max-w-md">

@@ -2,7 +2,9 @@
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-900 m-0 p-0 flex flex-col">
     <base-header>
       <div class="flex justify-between items-center w-full">
-        <div class="font-bold text-indigo-800 dark:text-indigo-200">Task Project</div>
+        <div class="font-bold text-indigo-800 dark:text-indigo-200 flex items-center gap-2">
+          📋 Task Project
+        </div>
         <div class="flex items-center gap-2">
           <Icon icon="iconamoon:mode-light" :color="isDark ? '#fbbf24' : '#f59e0b'" width="26" height="26" />
           <Switch

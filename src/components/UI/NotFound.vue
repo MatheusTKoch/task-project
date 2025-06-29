@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-900 flex flex-col">
     <base-header>
-      <div class="font-bold text-indigo-800 dark:text-indigo-200">Task Project</div>
+      <div class="font-bold text-indigo-800 dark:text-indigo-200 flex items-center gap-2">
+        📋 Task Project
+      </div>
     </base-header>
     <div class="flex-1">
       <content-box>
