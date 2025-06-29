@@ -1,6 +1,6 @@
 <template>
-    <nav class="relative flex w-full flex-wrap items-center justify-between bg-[#FBFBFB] py-2 shadow-lg lg:py-4 dark:bg-sky-950"
-  data-te-navbar-ref>
+    <nav class="w-full flex items-center justify-between bg-[#FBFBFB] px-4 py-3 shadow-lg dark:bg-sky-950"
+         style="margin: 0; padding-left: 1rem; padding-right: 1rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
         <slot></slot>
     </nav>
 </template>

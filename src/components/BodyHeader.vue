@@ -3,22 +3,29 @@
     <base-header>
       <slot></slot>
     </base-header>
-    <p class="text-3xl font-semibold p-3 dark:text-white">Minhas Tarefas</p>
-    <div class="text-2xl font-normal pb-5 dark:text-white">Adicione uma tarefa abaixo (apertando Enter) e marque as tarefas finalizadas</div>
-    <div class="my-4">
-      <input
-        placeholder="Add a new task!"
-        id="insertField"
-        type="text"
-        v-model="taskText"
-        @keydown.enter="submitTask(taskText)"
-      />
-      <button 
-        @click="submitTask(taskText)" 
-        class="bg-blue-500 text-white px-4 py-2 rounded ml-2 hover:bg-blue-600"
-      >
-        Add
-      </button>
+    <div class="max-w-4xl mx-auto px-4">
+      <p class="text-3xl font-semibold py-6 dark:text-white text-center">Minhas Tarefas</p>
+      <div class="text-lg font-normal pb-6 dark:text-white text-center">
+        Adicione uma tarefa abaixo (apertando Enter) e organize suas atividades
+      </div>
+      <div class="flex justify-center mb-8">
+        <div class="flex gap-2 w-full max-w-md">
+          <input
+            placeholder="Adicionar nova tarefa..."
+            id="insertField"
+            type="text"
+            v-model="taskText"
+            @keydown.enter="submitTask(taskText)"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+          />
+          <button 
+            @click="submitTask(taskText)" 
+            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          >
+            Adicionar
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -58,11 +65,4 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-
-input {
-  border: 0.25px solid;
-  border-radius: 7px;
-  width: 400px;
-}
-
 </style>

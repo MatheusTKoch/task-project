@@ -1,28 +1,36 @@
 <template>
-  <base-header>
-    <div class="py-0 px-3 font-semibold dark:text-white">Task Project</div>
-    <div class="flex">
-      <Icon icon="iconamoon:mode-light" :color="isDark ? 'white' : 'black'" width="26" height="26" />
-      <Switch
-        @click="toggleDark()"
-        v-model="isDark"
-        :class="isDark ? 'bg-gray-900' : 'bg-gray-700'"
-        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-      >
-        <span
-          :class="isDark ? 'translate-x-6' : 'translate-x-1'"
-          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
-        />
-      </Switch>
-      <Icon icon="material-symbols:dark-mode-outline" :color="isDark ? 'white' : 'black'" width="26" height="26" />
-    </div>
-  </base-header>
+  <div class="dark:bg-gray-900 min-h-screen m-0 p-0">
+    <base-header>
+      <div class="flex justify-between items-center w-full">
+        <div class="font-semibold dark:text-white">Task Project</div>
+        <div class="flex items-center gap-2">
+          <Icon icon="iconamoon:mode-light" :color="isDark ? 'white' : 'black'" width="26" height="26" />
+          <Switch
+            @click="toggleDark()"
+            v-model="isDark"
+            :class="isDark ? 'bg-gray-900' : 'bg-gray-700'"
+            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          >
+            <span
+              :class="isDark ? 'translate-x-6' : 'translate-x-1'"
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+            />
+          </Switch>
+          <Icon 
+            icon="material-symbols:dark-mode-outline" 
+            :color="isDark ? 'white' : 'black'" 
+            width="26" 
+            height="26" 
+          />
+        </div>
+      </div>
+    </base-header>
 
-  <content-box>
-    <h1 class="font-semibold text-3xl p-4 dark:text-white">Recuperar Senha</h1>
-    <h3 class="font-medium text-xl p-2 dark:text-white mb-6">
-      Digite seu email para receber as instruções de recuperação de senha
-    </h3>
+    <content-box>
+      <h1 class="font-semibold text-2xl mb-2 dark:text-white text-center">Recuperar Senha</h1>
+      <h3 class="font-medium text-lg mb-6 dark:text-white text-center">
+        Digite seu email para receber as instruções de recuperação de senha
+      </h3>
 
     <form @submit.prevent="sendPasswordReset" class="space-y-6">
       <div class="relative">
@@ -71,6 +79,7 @@
     confirm-text="Voltar ao Login"
     @confirm="handleSuccessModalConfirm"
   />
+  </div>
 </template>
 
 <script setup>

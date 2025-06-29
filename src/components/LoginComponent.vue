@@ -52,7 +52,7 @@
       </base-button>
     </div>
     
-    <div class="mt-4">
+    <div class="mt-4 text-center">
       <router-link 
         to="/forgot-password" 
         class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
