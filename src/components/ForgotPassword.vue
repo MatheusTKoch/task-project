@@ -75,10 +75,8 @@
   </content-box>
     </div>
 
-    <!-- Footer -->
     <app-footer />
 
-  <!-- Modal de Sucesso -->
   <base-modal 
     v-model="showSuccessModal"
     title="Email Enviado!"

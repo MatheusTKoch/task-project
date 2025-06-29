@@ -96,7 +96,21 @@
       </div>
     </main-header>
     
-    <!-- Conteúdo principal com padding -->
+    <div v-if="errorMessage" class="mx-4 mt-4">
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <Icon icon="mdi:alert-circle" color="#dc2626" width="20" height="20" class="mr-2" />
+          <p class="text-red-800 dark:text-red-200 text-sm">{{ errorMessage }}</p>
+          <button 
+            @click="errorMessage = ''"
+            class="ml-auto p-1 hover:bg-red-100 dark:hover:bg-red-800/20 rounded"
+          >
+            <Icon icon="mdi:close" color="#dc2626" width="16" height="16" />
+          </button>
+        </div>
+      </div>
+    </div>
+    
     <div class="flex-1 px-4 pb-4">
       <div v-if="isLoading" class="flex justify-center items-center h-32">
         <div class="spinner"></div>
@@ -131,10 +145,8 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <app-footer />
 
-    <!-- Modais ficam fora do container principal -->
     <base-modal 
       v-model="showDeleteModal"
       title="Confirmar Exclusão"
@@ -251,7 +263,7 @@ import { Icon } from "@iconify/vue";
 import { Switch, Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { useToggle, useDark } from "@vueuse/core";
 import { useRouter } from "vue-router";
-import { onValue, getDatabase, query, ref as refFirebase, orderByChild, equalTo, child, get, remove, push, set } from "@firebase/database";
+import { authService, taskService } from "../services/firebase.js";
 
 const router = useRouter();
 const auth = getAuth();
@@ -260,8 +272,12 @@ const toggleDark = useToggle(isDark);
 
 const logout = async () => {
   try {
-    await signOut(auth);
-    router.push("/");
+    const result = await authService.signOut();
+    if (result.success) {
+      router.push("/");
+    } else {
+      console.error("Error logging out:", result.error);
+    }
   } catch (error) {
     console.error("Error logging out:", error);
   }
@@ -271,129 +287,125 @@ const taskArray = ref({});
 const isLoading = ref(false);
 const newTaskText = ref("");
 const loggedUser = ref(null);
-const db = getDatabase();
-let tasksRefListener = null;
 const showDeleteModal = ref(false);
 const taskToDelete = ref(null);
 const showProfileModal = ref(false);
 const showSettingsModal = ref(false);
 const userEmail = ref("");
+const errorMessage = ref("");
+let unsubscribeAuth = null;
+let unsubscribeTasks = null;
 
-const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-  if (user) {
-    loggedUser.value = user.uid;
-    userEmail.value = user.email;
-    fetchUserTasks();
-  } else {
-    loggedUser.value = null;
-    userEmail.value = "";
-    taskArray.value = {};
-    if (tasksRefListener) {
-      tasksRefListener();
-      tasksRefListener = null;
+const setupAuthObserver = () => {
+  unsubscribeAuth = authService.onAuthStateChanged((user) => {
+    if (user) {
+      loggedUser.value = user.uid;
+      userEmail.value = user.email;
+      fetchUserTasks();
+    } else {
+      loggedUser.value = null;
+      userEmail.value = "";
+      taskArray.value = {};
+      if (unsubscribeTasks) {
+        taskService.removeListener(unsubscribeTasks);
+        unsubscribeTasks = null;
+      }
     }
-  }
-});
-
-function fetchUserTasks() {
-  isLoading.value = true;
-  if (tasksRefListener) {
-    tasksRefListener();
-  }
-  const tasksQuery = query(
-    refFirebase(db, "tasks"),
-    orderByChild("userUID"),
-    equalTo(loggedUser.value)
-  );
-  tasksRefListener = onValue(tasksQuery, (snapshot) => {
-    taskArray.value = snapshot.val() || {};
-    isLoading.value = false;
   });
-}
+};
 
-function addTask() {
-  if (!loggedUser.value || !newTaskText.value.trim()) return;
-  
-  const tasksRef = refFirebase(db, "tasks");
-  push(tasksRef, {
-    taskText: newTaskText.value,
-    userUID: loggedUser.value,
-    completed: false,
-    subtasks: []
-  })
-    .then(() => {
-      newTaskText.value = "";
-    })
-    .catch((error) => {
-      console.error("Error adding task:", error);
-    });
-}
-
-function updateTask(taskKey, updatedTask) {
+async function fetchUserTasks() {
   if (!loggedUser.value) return;
   
-  const tasksRef = refFirebase(db, "tasks");
-  const taskRef = child(tasksRef, taskKey);
+  isLoading.value = true;
+  errorMessage.value = "";
   
-  // Verifica se a tarefa pertence ao usuário
-  get(taskRef)
-    .then((snapshot) => {
-      const taskData = snapshot.val();
-      if (taskData && taskData.userUID === loggedUser.value) {
-        // Atualiza a tarefa mantendo o userUID
-        const taskToUpdate = {
-          ...updatedTask,
-          userUID: loggedUser.value
-        };
-        
-        // Remove a chave da tarefa para não causar conflito
-        delete taskToUpdate.key;
-        
-        set(taskRef, taskToUpdate)
-          .then(() => {
-            console.log("Task updated!");
-          })
-          .catch((error) => {
-            console.error("Error updating task:", error);
-          });
+  try {
+    if (unsubscribeTasks) {
+      taskService.removeListener(unsubscribeTasks);
+    }
+    
+    unsubscribeTasks = taskService.getUserTasks(loggedUser.value, (result) => {
+      if (result.success) {
+        taskArray.value = result.data;
       } else {
-        console.error("Access denied: task doesn't belong to user.");
+        errorMessage.value = result.error.message || "Erro ao carregar tarefas";
+        console.error("Error fetching tasks:", result.error);
       }
-    })
-    .catch((error) => {
-      console.error("Error fetching task data:", error);
+      
+      isLoading.value = false;
     });
+    
+  } catch (error) {
+    errorMessage.value = "Erro inesperado ao carregar tarefas";
+    console.error("Unexpected error:", error);
+    isLoading.value = false;
+  }
+}
+async function addTask() {
+  if (!loggedUser.value || !newTaskText.value.trim()) return;
+  
+  const taskText = newTaskText.value.trim();
+  errorMessage.value = "";
+  
+  try {
+    const result = await taskService.addTask({
+      taskText: taskText,
+      subtasks: []
+    });
+    
+    if (result.success) {
+      newTaskText.value = "";
+    } else {
+      errorMessage.value = result.error.message || "Erro ao adicionar tarefa";
+      console.error("Error adding task:", result.error);
+    }
+  } catch (error) {
+    errorMessage.value = "Erro inesperado ao adicionar tarefa";
+    console.error("Unexpected error:", error);
+  }
 }
 
+async function updateTask(taskKey, updatedTask) {
+  if (!loggedUser.value) return;
+  
+  errorMessage.value = "";
+  
+  try {
+    const result = await taskService.updateTask(taskKey, updatedTask);
+    
+    if (!result.success) {
+      errorMessage.value = result.error.message || "Erro ao atualizar tarefa";
+      console.error("Error updating task:", result.error);
+    }
+  } catch (error) {
+    errorMessage.value = "Erro inesperado ao atualizar tarefa";
+    console.error("Unexpected error:", error);
+  }
+}
 function deleteTask(taskKey) {
   taskToDelete.value = taskKey;
   showDeleteModal.value = true;
 }
 
-function confirmDeleteTask() {
+async function confirmDeleteTask() {
   if (!taskToDelete.value) return;
   
-  const tasksRef = refFirebase(db, "tasks");
-  const taskRef = child(tasksRef, taskToDelete.value);
-  get(taskRef)
-    .then((snapshot) => {
-      const taskData = snapshot.val();
-      if (taskData && taskData.userUID === loggedUser.value) {
-        remove(taskRef)
-          .then(() => {
-            console.log("Task removed!");
-            taskToDelete.value = null;
-          })
-          .catch((error) =>
-            console.error("Error removing task:", error)
-          );
-      } else {
-        console.error("Access denied: task doesn't belong to user.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching task data:", error);
-    });
+  errorMessage.value = "";
+  
+  try {
+    const result = await taskService.deleteTask(taskToDelete.value);
+    
+    if (result.success) {
+      taskToDelete.value = null;
+    } else {
+      errorMessage.value = result.error.message || "Erro ao excluir tarefa";
+      console.error("Error deleting task:", result.error);
+    }
+  } catch (error) {
+    errorMessage.value = "Erro inesperado ao excluir tarefa";
+    console.error("Unexpected error:", error);
+  }
 }
 
 function cancelDeleteTask() {
@@ -412,11 +424,15 @@ function handleSettingsSave() {
   showSettingsModal.value = false;
 }
 
+setupAuthObserver();
+
 onUnmounted(() => {
-  if (tasksRefListener) {
-    tasksRefListener();
+  if (unsubscribeTasks) {
+    taskService.removeListener(unsubscribeTasks);
   }
-  unsubscribeAuth();
+  if (unsubscribeAuth) {
+    unsubscribeAuth();
+  }
 });
 </script>
 

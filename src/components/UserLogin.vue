@@ -6,73 +6,81 @@ import BaseModal from "./UI/BaseModal.vue";
 import AppFooter from "./UI/AppFooter.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import {  signInWithEmailAndPassword, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { authService } from "../services/firebase.js";
 import BaseHeader from "./UI/BaseHeader.vue";
 import { Icon } from "@iconify/vue";
 import { Menu, MenuButton, MenuItems, MenuItem, Switch } from "@headlessui/vue";
-import { useToggle, useDark } from "@vueuse/core"; 
+import { useToggle, useDark } from "@vueuse/core";
 
 const router = useRouter();
 const errMsg = ref();
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
-const auth = getAuth();
 const showSuccessModal = ref(false);
 
-function signupOrLogin(emitInfo) {
+async function signupOrLogin(emitInfo) {
   const username = ref(emitInfo[0]);
   const password = ref(emitInfo[1]);
   const buttonText = ref(emitInfo[2]);
 
   errMsg.value = "";
   
-  
-  if (buttonText.value === "Login") {
-    signInWithEmailAndPassword(auth ,username.value, password.value)
-      .then(() => {
+  try {
+    if (buttonText.value === "Login") {
+      const result = await authService.signIn(username.value, password.value);
+      
+      if (result.success) {
         router.replace("/tasks");
-      })
-      .catch((error) => {
-        console.log("Login error:", error);
-        switch (error.code) {
+      } else {
+        switch (result.error.code) {
           case "auth/invalid-email":
-            errMsg.value = "Invalid email";
+            errMsg.value = "Email inválido";
             break;
           case "auth/user-not-found":
-            errMsg.value = "No account with that email was found";
+            errMsg.value = "Nenhuma conta foi encontrada com este email";
             break;
           case "auth/wrong-password":
-            errMsg.value = "Incorrect password";
+            errMsg.value = "Senha incorreta";
+            break;
+          case "auth/too-many-requests":
+            errMsg.value = "Muitas tentativas de login. Tente novamente mais tarde";
+            break;
+          case "auth/user-disabled":
+            errMsg.value = "Esta conta foi desabilitada";
             break;
           default:
-            errMsg.value = "Email or password was incorrect";
+            errMsg.value = "Email ou senha incorretos";
             break;
         }
-      });
-  } else if (buttonText.value === "Signup") {
-    createUserWithEmailAndPassword(auth, username.value, password.value)
-      .then(() => {
+      }
+    } else {
+      const result = await authService.signUp(username.value, password.value);
+      
+      if (result.success) {
         showSuccessModal.value = true;
-      })
-      .catch((error) => {
-        console.log(error.code);
-        switch (error.code) {
+      } else {
+        switch (result.error.code) {
           case "auth/email-already-in-use":
-            errMsg.value = "Este email já está sendo usado";
-            break;
-          case "auth/weak-password":
-            errMsg.value = "A senha deve ter pelo menos 6 caracteres";
+            errMsg.value = "Este email já está sendo usado por outra conta";
             break;
           case "auth/invalid-email":
             errMsg.value = "Email inválido";
             break;
+          case "auth/weak-password":
+            errMsg.value = "A senha deve ter pelo menos 6 caracteres";
+            break;
+          case "auth/operation-not-allowed":
+            errMsg.value = "Criação de conta não permitida. Entre em contato com o suporte";
+            break;
           default:
-            errMsg.value = "Erro ao criar conta: " + error.message;
+            errMsg.value = "Erro ao criar conta. Tente novamente";
             break;
         }
-      });
-  } else {
-    console.log("Unknown button text:", buttonText.value);
+      }
+    }
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    errMsg.value = "Erro inesperado. Tente novamente";
   }
 }
 
@@ -125,10 +133,8 @@ function handleSuccessModalConfirm() {
       </content-box>
     </div>
 
-    <!-- Footer -->
     <app-footer />
 
-    <!-- Modal de Sucesso -->
     <base-modal 
       v-model="showSuccessModal"
       title="Conta Criada com Sucesso!"
