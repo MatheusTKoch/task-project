@@ -1,11 +1,11 @@
 <template>
-  <section class="dark:bg-gray-900">
+  <section>
     <base-header>
       <slot></slot>
     </base-header>
     <div class="max-w-4xl mx-auto px-4">
-      <p class="text-3xl font-semibold py-6 dark:text-white text-center">Minhas Tarefas</p>
-      <div class="text-lg font-normal pb-6 dark:text-white text-center">
+      <p class="text-3xl font-bold py-6 text-indigo-800 dark:text-indigo-200 text-center">Minhas Tarefas</p>
+      <div class="text-lg font-normal pb-6 text-indigo-600 dark:text-indigo-300 text-center">
         Adicione uma tarefa abaixo (apertando Enter) e organize suas atividades
       </div>
       <div class="flex justify-center mb-8">
@@ -16,11 +16,11 @@
             type="text"
             v-model="taskText"
             @keydown.enter="submitTask(taskText)"
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+            class="flex-1 px-4 py-2 border border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 bg-white/80 backdrop-blur-sm"
           />
           <button 
             @click="submitTask(taskText)" 
-            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium"
+            class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors font-medium shadow-md hover:shadow-lg"
           >
             Adicionar
           </button>

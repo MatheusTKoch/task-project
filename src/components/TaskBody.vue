@@ -1,80 +1,80 @@
 <template>
-  <div class="dark:bg-gray-900 min-h-screen m-0 p-0">
+  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-900 m-0 p-0 flex flex-col">
     <main-header>
       <div class="flex justify-between items-center w-full">
-        <div class="font-semibold dark:text-white">Task Project</div>
+        <div class="font-bold text-indigo-800 dark:text-indigo-200">Task Project</div>
         <div class="flex items-center gap-2">
-          <Icon icon="iconamoon:mode-light" :color="isDark ? 'white' : 'black'" width="26" height="26" />
+          <Icon icon="iconamoon:mode-light" :color="isDark ? '#fbbf24' : '#f59e0b'" width="26" height="26" />
           <Switch
             @click="toggleDark()"
             v-model="isDark"
-            :class="isDark ? 'bg-gray-900' : 'bg-gray-700'"
+            :class="isDark ? 'bg-indigo-600' : 'bg-indigo-400'"
             class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
           >
             <span
               :class="isDark ? 'translate-x-6' : 'translate-x-1'"
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm"
             />
           </Switch>
           <Icon 
             icon="material-symbols:dark-mode-outline" 
-            :color="isDark ? 'white' : 'black'" 
+            :color="isDark ? '#c7d2fe' : '#6366f1'" 
             width="26" 
             height="26" 
           />
           
           <Popover class="relative ml-4">
-            <PopoverButton class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
+            <PopoverButton class="flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-100 hover:bg-indigo-200 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors border border-indigo-200 dark:border-slate-600">
               <Icon 
                 icon="mdi:account-circle" 
-                :color="isDark ? 'white' : 'black'" 
+                :color="isDark ? '#c7d2fe' : '#4f46e5'" 
                 width="24" 
                 height="24" 
               />
               <Icon 
                 icon="mdi:chevron-down" 
-                :color="isDark ? 'white' : 'black'" 
+                :color="isDark ? '#c7d2fe' : '#4f46e5'" 
                 width="16" 
                 height="16" 
               />
             </PopoverButton>
 
-            <PopoverPanel class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <PopoverPanel class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-indigo-100 dark:border-slate-700">
               <div class="px-1 py-1">
-                <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-600">
-                  <p class="text-sm font-medium text-gray-900 dark:text-white">
+                <div class="px-3 py-2 border-b border-indigo-200 dark:border-slate-600">
+                  <p class="text-sm font-medium text-indigo-900 dark:text-indigo-200">
                     {{ userEmail || 'Usuário' }}
                   </p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                  <p class="text-xs text-indigo-600 dark:text-indigo-400">
                     Logado
                   </p>
                 </div>
 
                 <button
                   @click="openProfileModal"
-                  class="group flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  class="group flex w-full items-center rounded-md px-3 py-2 text-sm text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-slate-700"
                 >
                   <Icon 
                     icon="mdi:account-edit" 
                     class="mr-3 h-4 w-4" 
-                    :color="isDark ? '#d1d5db' : '#374151'"
+                    :color="isDark ? '#a5b4fc' : '#4338ca'"
                   />
                   Editar Perfil
                 </button>
 
                 <button
                   @click="openSettingsModal"
-                  class="group flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  class="group flex w-full items-center rounded-md px-3 py-2 text-sm text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-slate-700"
                 >
                   <Icon 
                     icon="mdi:cog" 
                     class="mr-3 h-4 w-4" 
-                    :color="isDark ? '#d1d5db' : '#374151'"
+                    :color="isDark ? '#a5b4fc' : '#4338ca'"
                   />
                   Configurações
                 </button>
 
-                <div class="border-t border-gray-200 dark:border-gray-600 mt-1 pt-1">
+                <div class="border-t border-indigo-200 dark:border-slate-600 mt-1 pt-1">
                   <button
                     @click="logout"
                     class="group flex w-full items-center rounded-md px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
@@ -95,7 +95,7 @@
     </main-header>
     
     <!-- Conteúdo principal com padding -->
-    <div class="px-4 pb-4">
+    <div class="flex-1 px-4 pb-4">
       <div v-if="isLoading" class="flex justify-center items-center h-32">
         <div class="spinner"></div>
       </div>
@@ -114,6 +114,9 @@
       </ul>
       </div>
     </div>
+
+    <!-- Footer -->
+    <app-footer />
 
     <!-- Modais ficam fora do container principal -->
     <base-modal 
@@ -224,6 +227,7 @@
 <script setup>
 import MainHeader from "./BodyHeader.vue";
 import BaseModal from "./UI/BaseModal.vue";
+import AppFooter from "./UI/AppFooter.vue";
 import { ref, onUnmounted } from "vue";
 import { getAuth, signOut } from "firebase/auth";
 import { Icon } from "@iconify/vue";
@@ -363,20 +367,42 @@ onUnmounted(() => {
 
 <style scoped>
 .task-list {
-  list-style-type: disc;
+  list-style-type: none;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding-left: 1rem;
+  padding: 0;
 }
 
 .task-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.dark .task-item {
+  background: rgba(51, 65, 85, 0.7);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #e2e8f0;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+}
+
+.dark .task-item:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
  
 .delete-btn {
@@ -384,16 +410,25 @@ onUnmounted(() => {
   border: none;
   cursor: pointer;
   color: #ef4444;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  transform: scale(1.1);
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #000;
+  border: 4px solid rgba(99, 102, 241, 0.1);
+  border-left-color: #6366f1;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

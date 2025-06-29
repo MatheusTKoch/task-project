@@ -38,14 +38,14 @@
     <div class="flex gap-4 justify-center mt-6">
       <base-button 
         @click.prevent="handleLogin" 
-        custom-class="bg-blue-500 hover:bg-blue-600 text-white border-blue-500 font-semibold disabled:opacity-50"
+        custom-class="bg-indigo-500 hover:bg-indigo-600 text-white border-indigo-500 font-semibold disabled:opacity-50 transition-all duration-200"
         :disabled="!isFormValid"
       >
         Login
       </base-button>
       <base-button 
         @click.prevent="handleSignup" 
-        custom-class="bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold disabled:opacity-50"
+        custom-class="bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500 font-semibold disabled:opacity-50 transition-all duration-200"
         :disabled="!isFormValid"
       >
         Registrar-se
@@ -55,7 +55,7 @@
     <div class="mt-4 text-center">
       <router-link 
         to="/forgot-password" 
-        class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+        class="text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 underline transition-colors"
       >
         Esqueci minha senha
       </router-link>

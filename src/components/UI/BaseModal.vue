@@ -27,16 +27,16 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md p-6 text-left align-middle shadow-2xl transition-all border border-indigo-100 dark:border-slate-700"
             >
               <DialogTitle
                 as="h3"
-                class="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+                class="text-lg font-bold leading-6 text-indigo-900 dark:text-indigo-100"
               >
                 {{ title }}
               </DialogTitle>
               <div class="mt-2">
-                <div class="text-sm text-gray-500 dark:text-gray-300">
+                <div class="text-sm text-indigo-700 dark:text-indigo-300">
                   <slot name="content">
                     {{ message }}
                   </slot>
@@ -48,14 +48,14 @@
                   <button
                     v-if="showCancel"
                     type="button"
-                    class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 dark:bg-gray-600 dark:text-white dark:border-gray-500 dark:hover:bg-gray-700"
+                    class="inline-flex justify-center rounded-md border border-gray-300 bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 dark:bg-slate-600/80 dark:text-white dark:border-slate-500 dark:hover:bg-slate-700 transition-colors"
                     @click="cancelModal"
                   >
                     {{ cancelText }}
                   </button>
                   <button
                     type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 shadow-md hover:shadow-lg transition-all"
                     @click="confirmModal"
                   >
                     {{ confirmText }}
