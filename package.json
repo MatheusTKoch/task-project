@@ -23,11 +23,11 @@
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.1",
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue": "^6.0.7",
     "autoprefixer": "^10.4.15",
     "gh-pages": "^6.3.0",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.3.3",
-    "vite": "^6.4.2"
+    "vite": "^8.1.0"
   }
 }
